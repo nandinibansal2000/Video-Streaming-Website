@@ -9,6 +9,15 @@ def getMovies(ProductionHouse ProductionHouse):
 
 def getMovieViewers(Movie movie):
 	#Get the list of people who watched the given movie
+	
+def getUpcomingMovie(ProductionHouse productionHouse):
+	#get upcoming movies corresponding to production house
+
+def uploadMovie():
+	#upload movie
+
+def removeMovie():
+	#remove movie
 
 #Python Queries
 
