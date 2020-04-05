@@ -1,3 +1,9 @@
+""" TODO:
+	Update Family table to align it to Users
+"""
+
+
+
 def getWatchHistoryNames(mydb, input_UID):
 	# Optimisation: Make index on UID in Watch_List (check if useful)
 	mycursor = mydb.cursor()
@@ -11,26 +17,53 @@ def watchNewMovie(mydb, input_UID, input_MovieID, input_Rating):
 	mycursor.execute(sql)
 	mydb.commit()
 
+def getName(mydb, input_UID):
+	mycursor = mydb.cursor()
+	sql = "SELECT LoginID FROM Users WHERE UID='%d'"%(input_UID)
+	mycursor.execute(sql)
+	return  mycursor.fetchall()
+
+def getHoursWatched(mydb, input_UID):
+	mycursor = mydb.cursor()
+	refreshAverageTime()
+	sql = "SELECT AvgTime FROM Users WHERE UID='%d'"%(input_UID)
+	mycursor.execute(sql)
+	return  mycursor.fetchall()
+
+
+def refreshAverageTime():
+	# Calculate average time from WatchHistory and Update AvgTime in Users
+	pass
+
+def searchMovie(mydb, movieName):
+	mycursor = mydb.cursor()
+	movieName = '%'+movieName+'%'
+	sql = "SELECT Movie_id FROM Movies WHERE Movie_Name LIKE '%s'"%(movieName)
+	mycursor.execute(sql)
+	return  mycursor.fetchall()
+
+def getSuggestions(mydb):
+	pass
+
+def makePaymentForUser(mydb, input_UID):
+	pass
+
+def makePaymentForFamily(mydb, input_UID):
+	pass
+
+def func(mydb):
+	mycursor = mydb.cursor()
+	sql = ""
+	mycursor.execute(sql)
+
+def func(mydb):
+	mycursor = mydb.cursor()
+	sql = ""
+	mycursor.execute(sql)
 
 
 def main(input_username):
-	import mysql.connector
-
-	mydb = mysql.connector.connect(
-	  host="localhost",
-	  user="user",
-	  passwd="password",
-	  database="myDB"
-	)
-
-	mycursor = mydb.cursor()
-
-	sql = "SELECT * from Passwords WHERE LoginID='%s'"%(input_username)
-	mycursor.execute(sql)
-	myresult = mycursor.fetchall()
-
-	for x in myresult:
-	  print(x)
+	pass
 
 
 
