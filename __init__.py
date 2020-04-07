@@ -20,6 +20,12 @@ def Dashboard():
 @app.route('/register')
 def register():
     return render_template("register.html")
+
+@app.route('/user')
+def userPage():
+    return render_template("user.html")
+
+
 # @app.route('/login/', methods = ['GET','POST'])
 # def login_page():
 #     return render_template("login.html")

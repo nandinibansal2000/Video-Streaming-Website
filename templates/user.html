@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Your Dashboard</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
+<body>
+	<div class="container" id="head">
+		<div class="jumbotron">
+				<div class="container" id="head">
+					<h1>Name here</h1>
+					<h4 style="text-align: left;">LoginId:123</h4>
+				</div>
+			
+		</div>
+		<!-- <div class="jumbotron">
+			<div class="list-group list-group-horizontal">
+				<a href="#" class="list-group-item list-group-item-action">
+					<h1>Name here</h1>
+					<h4 style="text-align: left;">LoginId:123</h4>
+				</a>
+				<a href="#" class="list-group-item list-group-item-action">
+					<h3>Average</h3>
+					<h4>Watch Time</h4>
+					<h2>24 Hrs/day</h2>
+				</a>
+			</div>
+		</div> -->
+		<div class="input-group mb-3">
+	  		<div class="input-group-prepend">
+	    		<span class="input-group-text">Search for a movie:</span>
+	  		</div>
+	  		<input type="text" class="form-control" aria-label="SearchMovieName">
+	  		<div class="input-group-append">
+	    		<button class="btn btn-outline-secondary" type="button" id="button-addon2">Go</button>
+	  		</div>
+		</div>
+
+
+		<div class="list-group list-group-horizontal">
+		  <a href="#" class="list-group-item list-group-item-action">
+		    <div class="card">
+		      <img src="{{ url_for('static', filename='images/poster.jpg') }}" class="card-img-top" alt="...">
+		      <div class="card-body">
+		        <h5 class="card-title">Movie Name</h5>
+		        <p class="card-text">Rating: 7.2 | IMDB: 7.8</p>
+		      </div>
+		    </div>
+		  </a>
+		  </a>
+		  <a href="#" class="list-group-item list-group-item-action">
+		    <div class="card">
+		      <img src="{{ url_for('static', filename='images/poster.jpg') }}" class="card-img-top" alt="...">
+		      <div class="card-body">
+		        <h5 class="card-title">Movie Name</h5>
+		        <p class="card-text">Rating: 7.2 | IMDB: 7.8</p>
+		      </div>
+		    </div>
+		  </a>
+		  <a href="#" class="list-group-item list-group-item-action">
+		      <div class="card">
+		        <img src="{{ url_for('static', filename='images/poster.jpg') }}" class="card-img-top" alt="...">
+		        <div class="card-body">
+		          <h5 class="card-title">Movie Name</h5>
+		          <p class="card-text">Rating: 7.2 | IMDB: 7.8</p>
+		        </div>
+		      </div>
+		    </a>
+		  </a>
+		</div>
+	</div>
+	
+</body>
+</html>
