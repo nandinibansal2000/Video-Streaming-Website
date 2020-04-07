@@ -2,7 +2,8 @@
 	Update Family table to align it to Users
 """
 
-
+import mysql.connector
+from passlib.hash import sha256_crypt
 
 def getWatchHistoryNames(mydb, input_UID):
 	# Optimisation: Make index on UID in Watch_List (check if useful)
@@ -68,5 +69,116 @@ def main(input_username):
 
 
 
+
+
+
+def encryptFunc(text):
+	return text
+
+def CreatePasswords(mydb):
+	# Optimisation: Make index on UID in Watch_List (check if useful)
+	mycursor = mydb.cursor()
+	sql = "SELECT * FROM Passwords"
+	mycursor.execute(sql)
+	myresult =  mycursor.fetchall()
+	for x in myresult:
+		LoginID1 = x[0]
+		Password1 = encryptFunc(LoginID1)
+		sql2 = "UPDATE Passwords SET Passwd='%s' WHERE LoginID = '%s'"%(Password1, LoginID1)
+		mycursor.execute(sql2)
+		mydb.commit()
+
+
+	sql = "SELECT * FROM Artists"
+	mycursor.execute(sql)
+	myresult =  mycursor.fetchall()
+	for x in myresult:
+		LoginID1 = x[1]
+		Password1 = encryptFunc(LoginID1)
+		sql2 = "UPDATE Artists SET Passwd='%s' WHERE Name = '%s'"%(Password1, LoginID1)
+		mycursor.execute(sql2)
+		mydb.commit()
+
+	sql = "SELECT * FROM Production_Houses"
+	mycursor.execute(sql)
+	myresult =  mycursor.fetchall()
+	for x in myresult:
+		LoginID1 = x[1]
+		Password1 = encryptFunc(LoginID1)
+		sql2 = "UPDATE Production_Houses SET Passwd='%s' WHERE LoginID = '%s'"%(Password1, LoginID1)
+		mycursor.execute(sql2)
+		mydb.commit()
+
+	sql = "SELECT * FROM Production_Houses"
+	mycursor.execute(sql)
+	myresult =  mycursor.fetchall()
+	for x in myresult:
+		print(x)
+
+def updateFamilyTable(mydb):
+	mycursor = mydb.cursor()
+	sql = "SELECT * FROM Family"
+	mycursor.execute(sql)
+	myresult =  mycursor.fetchall()
+	for x in myresult:
+		f = int(x[0])
+		for i in range(1,5):
+			u = x[i]
+			sql = "UPDATE Users SET FamilyID='%d' WHERE LoginID='%s'"%(f, u)
+			mycursor.execute(sql)
+			mydb.commit()
+
+def PasswordsCorrection(mydb):
+	mycursor = mydb.cursor()
+	sql = "ALTER TABLE Passwords MODIFY COLUMN Passwd varchar(150)"
+	mycursor.execute(sql)
+	mydb.commit()
+
+	sql = "ALTER TABLE Passwords MODIFY COLUMN LoginID varchar(150)"
+	mycursor.execute(sql)
+	mydb.commit()
+
+	sql = "ALTER TABLE Passwords ADD Designation varchar(30)"
+	mycursor.execute(sql)
+	mydb.commit()
+
+	sql = "UPDATE Passwords SET Designation='User'"
+	mycursor.execute(sql)
+	mydb.commit()
+
+	sql = "SELECT * FROM Artists"
+	mycursor.execute(sql)
+	myresult =  mycursor.fetchall()
+	for x in myresult:
+		sql = "insert into Passwords values('%s', 'TBD', 'Artist')"%(x[1])
+		mycursor.execute(sql)
+		mydb.commit()
+
+	sql = "SELECT * FROM Production_Houses"
+	mycursor.execute(sql)
+	myresult =  mycursor.fetchall()
+	for x in myresult:
+		sql = "insert into Passwords values('%s', 'TBD', 'ProductionHouse')"%(x[1])
+		mycursor.execute(sql)
+		mydb.commit()
+
+	sql = "SELECT * FROM Passwords"
+	mycursor.execute(sql)
+	myresult =  mycursor.fetchall()
+	for x in myresult:
+		l = x[0]
+		sql = "UPDATE Passwords SET Passwd='%s' WHERE LoginID='%s'"%(sha256_crypt.encrypt(l), l)
+		mycursor.execute(sql)
+		mydb.commit()
+
 if __name__ == '__main__':
-	main("rauhv502")
+
+
+	mydb = mysql.connector.connect(
+	  host="bsv8fhdqqljnoq8jt44x-mysql.services.clever-cloud.com",
+	  user="u7yvejx2zsljnqyn",
+	  passwd="ooJHBCTBUvEIywAnEc2x",
+	  database="bsv8fhdqqljnoq8jt44x"
+	)
+
+	PasswordsCorrection(mydb)
