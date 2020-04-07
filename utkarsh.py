@@ -20,6 +20,12 @@ def watchNewMovie(mydb, input_UID, input_MovieID, input_Rating):
 
 def getName(mydb, input_UID):
 	mycursor = mydb.cursor()
+	sql = "SELECT Name FROM Users WHERE UID='%d'"%(input_UID)
+	mycursor.execute(sql)
+	return  mycursor.fetchall()
+
+def getLoginID(mydb, input_UID):
+	mycursor = mydb.cursor()
 	sql = "SELECT LoginID FROM Users WHERE UID='%d'"%(input_UID)
 	mycursor.execute(sql)
 	return  mycursor.fetchall()

@@ -7,6 +7,9 @@ from dbconnect import connection
 from passlib.hash import sha256_crypt
 from MySQLdb import escape_string as thwart
 import gc
+import utkarsh
+import mysql.connector
+from passlib.hash import sha256_crypt
 
 
 app = Flask(__name__)
@@ -21,9 +24,20 @@ def Dashboard():
 def register():
     return render_template("register.html")
 
-@app.route('/user')
-def userPage():
-    return render_template("user.html")
+@app.route('/user/<int:UID>')
+def userPage(UID):
+	mydb = mysql.connector.connect(
+	  host="localhost",
+	  user="user",
+	  passwd="password",
+	  database="myDB"
+	)
+	print(UID)
+	name1 = utkarsh.getName(mydb, UID)[0][0]
+	LoginID1 = utkarsh.getLoginID(mydb, UID)[0][0]
+	print(name1)
+	print(type(name1))
+	return render_template("user.html", name=name1, LoginID=LoginID1)
 
 
 # @app.route('/login/', methods = ['GET','POST'])
