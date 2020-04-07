@@ -32,12 +32,21 @@ def userPage(UID):
 	  passwd="password",
 	  database="myDB"
 	)
-	print(UID)
 	name1 = utkarsh.getName(mydb, UID)[0][0]
 	LoginID1 = utkarsh.getLoginID(mydb, UID)[0][0]
-	print(name1)
-	print(type(name1))
-	return render_template("user.html", name=name1, LoginID=LoginID1)
+	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
+	return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1)
+
+@app.route('/movie/<int:UID>/<int:MovieID>')
+def moviePage(UID, MovieID):
+	mydb = mysql.connector.connect(
+	  host="localhost",
+	  user="user",
+	  passwd="password",
+	  database="myDB"
+	)
+	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
+	return render_template("movie.html", hours=Hours1)
 
 
 # @app.route('/login/', methods = ['GET','POST'])

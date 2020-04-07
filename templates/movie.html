@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Movie Name</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
+<body>
+	<div class="container" id="head">
+		<div class="pos-f-t">
+		  <div class="collapse" id="navbarToggleExternalContent">
+		    <div class="bg-dark p-4">
+		      <button type="button" class="btn btn-secondary btn-lg btn-block">Make Payment</button>
+		      <button type="button" class="btn btn-secondary btn-lg btn-block">Edit Profile</button>
+		      <button type="button" class="btn btn-secondary btn-lg btn-block">Log Out</button>
+		    </div>
+		  </div>
+		  <nav class="navbar navbar-dark bg-dark">
+		    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+		      <span class="navbar-toggler-icon"></span>
+		    </button>
+		    <h3 align="right" style="color:white;">Average Time Spent: {{hours}} hrs/day</h3>
+		  </nav>
+		</div>
+		<div class="jumbotron jumbotron-fluid">
+		  <div class="container">
+		    <h1 class="display-4" align="center">Movie Name</h1>
+		    
+		  </div>
+		</div>
+		<img src="{{ url_for('static', filename='images/banner.jpg') }}" alt="Movie Banner" width="100%" >
+		<p></p>
+		<div class="jumbotron jumbotron-fluid">
+			<div class="container">
+			<h2>INFO</h2>
+			<div class="container">
+			<p>	     Genre:</p>
+			<p>	     Production House:</p>
+			<p>	     IMDB Rating:</p>
+			<p>	     Personalized Rating:</p>
+			<p>	     Duration:</p>
+			</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+	
+</body>
+</html>
