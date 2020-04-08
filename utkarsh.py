@@ -30,6 +30,12 @@ def getLoginID(mydb, input_UID):
 	mycursor.execute(sql)
 	return  mycursor.fetchall()
 
+def getUID(mydb, input_LogonID):
+	mycursor = mydb.cursor()
+	sql = "SELECT UID FROM Users WHERE LoginID='%s'"%(input_LogonID)
+	mycursor.execute(sql)
+	return  mycursor.fetchall()[0][0]
+
 def getHoursWatched(mydb, input_UID):
 	mycursor = mydb.cursor()
 	refreshAverageTime()

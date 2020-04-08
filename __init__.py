@@ -13,6 +13,14 @@ from passlib.hash import sha256_crypt
 
 
 app = Flask(__name__)
+
+mydb = mysql.connector.connect(
+	  host="localhost",
+	  user="user",
+	  passwd="password",
+	  database="myDB"
+	)
+
 @app.route('/')
 def home():
     return render_template("main.html")
@@ -26,12 +34,7 @@ def register():
 
 @app.route('/user/<int:UID>')
 def userPage(UID):
-	mydb = mysql.connector.connect(
-	  host="localhost",
-	  user="user",
-	  passwd="password",
-	  database="myDB"
-	)
+	
 	name1 = utkarsh.getName(mydb, UID)[0][0]
 	LoginID1 = utkarsh.getLoginID(mydb, UID)[0][0]
 	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
@@ -39,12 +42,7 @@ def userPage(UID):
 
 @app.route('/movie/<int:UID>/<int:MovieID>')
 def moviePage(UID, MovieID):
-	mydb = mysql.connector.connect(
-	  host="localhost",
-	  user="user",
-	  passwd="password",
-	  database="myDB"
-	)
+	
 	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
 	return render_template("movie.html", hours=Hours1)
 
@@ -103,7 +101,7 @@ def get_data():
 					session['logged_in'] = True
 					session['username'] = username
 					print("llllllllll")
-					return redirect(url_for('Dashboard'))
+					return redirect(url_for('userPage', UID=uid1))
 			else:
 				username  = request.form["name"]
 				# email = form.email.data
@@ -119,7 +117,8 @@ def get_data():
 				          (username,password))
 				# print(x)
 				if(int(x)==1):
-					return redirect(url_for('Dashboard'))
+					uid1 = utkarsh.getUID(mydb, username)
+					return redirect(url_for('userPage', UID=uid1))
 				else:
 					# print("oooof")
 					flash("Wrong Credentials")
