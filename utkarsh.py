@@ -142,21 +142,25 @@ def updateFamilyTable(mydb):
 
 def PasswordsCorrection(mydb):
 	mycursor = mydb.cursor()
-	sql = "ALTER TABLE Passwords MODIFY COLUMN Passwd varchar(150)"
-	mycursor.execute(sql)
-	mydb.commit()
 
-	sql = "ALTER TABLE Passwords MODIFY COLUMN LoginID varchar(150)"
-	mycursor.execute(sql)
-	mydb.commit()
+	# # DROP FORIEGN KEY CONSTRAINS
+	# sql = "ALTER TABLE Passwords MODIFY COLUMN Passwd varchar(150)"
+	# mycursor.execute(sql)
+	# mydb.commit()
+	# # ADD FORIEGN KEY CONSTRAINS
 
-	sql = "ALTER TABLE Passwords ADD Designation varchar(30)"
-	mycursor.execute(sql)
-	mydb.commit()
+	# sql = "ALTER TABLE Passwords MODIFY COLUMN LoginID varchar(150)"
+	# mycursor.execute(sql)
+	# mydb.commit()
 
-	sql = "UPDATE Passwords SET Designation='User'"
-	mycursor.execute(sql)
-	mydb.commit()
+
+	# sql = "ALTER TABLE Passwords ADD Designation varchar(30)"
+	# mycursor.execute(sql)
+	# mydb.commit()
+
+	# sql = "UPDATE Passwords SET Designation='User'"
+	# mycursor.execute(sql)
+	# mydb.commit()
 
 	sql = "SELECT * FROM Artists"
 	mycursor.execute(sql)
@@ -187,10 +191,10 @@ if __name__ == '__main__':
 
 
 	mydb = mysql.connector.connect(
-	  host="bsv8fhdqqljnoq8jt44x-mysql.services.clever-cloud.com",
-	  user="u7yvejx2zsljnqyn",
-	  passwd="ooJHBCTBUvEIywAnEc2x",
-	  database="bsv8fhdqqljnoq8jt44x"
+	  host="localhost",
+	  user="user",
+	  passwd="password",
+	  database="aniket3"
 	)
 
 	PasswordsCorrection(mydb)
