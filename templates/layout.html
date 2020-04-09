@@ -2,6 +2,7 @@
 <html>
 <head>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<head><link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet"></head>
 <style>
 * {box-sizing: border-box;}
 
@@ -97,7 +98,8 @@ body {
   <div class="login-container">
     <form action="/action_page.php">
     
-      <a href="#Logged">Logged in</a>
+      <a href="{{url_for('home')}}">Log out</a>
+
     </form>
   </div>
 </div>
