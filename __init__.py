@@ -46,6 +46,10 @@ def moviePage(UID, MovieID):
 	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
 	return render_template("movie.html", hours=Hours1)
 
+@app.route('/pHouse')
+def productionHousePage():
+	return render_template("productionHouse.html")
+
 
 # @app.route('/login/', methods = ['GET','POST'])
 # def login_page():
