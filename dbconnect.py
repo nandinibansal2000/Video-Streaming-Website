@@ -5,9 +5,9 @@ import MySQLdb
 
 def connection():
 	conn=MySQLdb.connect(host="localhost",
-						user="username",
+						user="user",
 						passwd="password",
-						db="DBMS")
+						db="myDB2")
 	c=conn.cursor()
 	return c,conn
 

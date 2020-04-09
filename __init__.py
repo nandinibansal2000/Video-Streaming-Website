@@ -18,7 +18,7 @@ mydb = mysql.connector.connect(
 	  host="localhost",
 	  user="user",
 	  passwd="password",
-	  database="myDB"
+	  database="myDB2"
 	)
 
 @app.route('/')
@@ -108,6 +108,7 @@ def get_data():
 				#	password = sha256_crypt.encrypt((str(request.form["psw"])))
 				# print("lol")
 				password = request.form["pass"]
+				# password = sha256_crypt.encrypt(password)
 				# print("poi")
 				# print(username,password)
 				print("yayy")
@@ -115,7 +116,7 @@ def get_data():
 				# print("erjkh")
 				x = c.execute("SELECT * FROM Passwords WHERE LoginID = '%s' AND passwd='%s'"%
 				          (username,password))
-				# print(x)
+				print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"+str(x))
 				if(int(x)==1):
 					uid1 = utkarsh.getUID(mydb, username)
 					return redirect(url_for('userPage', UID=uid1))
