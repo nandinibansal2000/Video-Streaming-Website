@@ -16,9 +16,9 @@ app = Flask(__name__)
 
 mydb = mysql.connector.connect(
 	  host="localhost",
-	  user="user",
-	  passwd="password",
-	  database="myDB2"
+	  user="new",
+	  passwd="jatin1995@2000",
+	  database="mydb"
 	)
 
 @app.route('/')
@@ -50,6 +50,21 @@ def moviePage(UID, MovieID):
 def productionHousePage():
 	return render_template("productionHouse.html")
 
+def user_signup(c,conn,username,password,designation,age):
+	c.execute("SELECT MAX(UID) FROM Users ")+1
+	m= c.fetchone() 
+	ID=int(m[0]+1)
+	print(ID)
+	c.execute("INSERT INTO Users(UID,LoginID,Name,Age,IndividualPayment,AvgTime,SubscriptionType) VALUES(%s,%s,%s,%s,%s,%s,%s)",(ID,username,username,age,'0',0,"none"))
+	conn.commit()
+	flash("Thanks for registering!")
+	c.close()
+	conn.close()
+	gc.collect()
+	
+
+	session['logged_in'] = True
+	session['username'] = username
 
 # @app.route('/login/', methods = ['GET','POST'])
 # def login_page():
@@ -76,6 +91,10 @@ def get_data():
 				#	password = sha256_crypt.encrypt((str(request.form["psw"])))
 				# print("lol")
 				password = request.form["psw"]
+				# password = request.form["psw"]
+				designation= request.form["designation"]
+				age  = request.form["age"]
+	
 				# print("kljh")
 				# print(username)
 				# print(type(username))
@@ -91,21 +110,19 @@ def get_data():
 					return render_template('register.html')
 
 				else:
-					# print("pppp")
-					c.execute("INSERT INTO Passwords VALUES (%s, %s)",
-					          (thwart(username),thwart(password)))
+					print("pppp")
+					c.execute("INSERT INTO Passwords VALUES (%s, %s,%s)",
+					          (thwart(username),thwart(password),thwart(designation)))
+				
 					# print("llll")
-					conn.commit()
+					
 					flash("Thanks for registering!")
-					c.close()
-					conn.close()
-					gc.collect()
-					# print("yyyyyyyyyyyy")
+					
+					if(designation=="User"):
 
-					session['logged_in'] = True
-					session['username'] = username
-					print("llllllllll")
-					return redirect(url_for('userPage', UID=uid1))
+						user_signup(c,conn,username,password,designation,age)
+						uid1 = utkarsh.getUID(mydb, username)
+						return redirect(url_for('userPage', UID=uid1))
 			else:
 				username  = request.form["name"]
 				# email = form.email.data
@@ -121,6 +138,7 @@ def get_data():
 				x = c.execute("SELECT * FROM Passwords WHERE LoginID = '%s' AND passwd='%s'"%
 				          (username,password))
 				print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"+str(x))
+				print(x)
 				if(int(x)==1):
 					uid1 = utkarsh.getUID(mydb, username)
 					return redirect(url_for('userPage', UID=uid1))
