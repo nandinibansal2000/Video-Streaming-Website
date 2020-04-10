@@ -10,15 +10,22 @@ import gc
 import utkarsh
 import mysql.connector
 from passlib.hash import sha256_crypt
+import productionHouse
 
 
 app = Flask(__name__)
 
+# mydb = mysql.connector.connect(
+# 	  host="localhost",
+# 	  user="user",
+# 	  passwd="passwd",
+# 	  database="mydb"
+# 	)
 mydb = mysql.connector.connect(
 	  host="localhost",
 	  user="user",
-	  passwd="passwd",
-	  database="mydb"
+	  passwd="password",
+	  database="myDB2"
 	)
 
 @app.route('/')
@@ -46,9 +53,11 @@ def moviePage(UID, MovieID):
 	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
 	return render_template("movie.html", hours=Hours1)
 
-@app.route('/pHouse')
-def productionHousePage():
-	return render_template("productionHouse.html")
+@app.route('/pHouse/<int:PID>')
+def productionHousePage(PID):
+	mycursor = mydb.cursor()
+	name1 = productionHouse.getName(mycursor, PID)
+	return render_template("productionHouse.html", name=name1)
 
 def user_signup(c,conn,username,password,designation,age):
 	c.execute("SELECT MAX(UID) FROM Users ")+1

@@ -7,18 +7,18 @@ import mysql.connector
 import pygal
 
 
-mydb = mysql.connector.connect(
+# mydb = mysql.connector.connect(
 
-	host="localhost",
-	user="Drigil",
-	passwd="Anshul12",
-	database = "dbmsproject",
-	auth_plugin="mysql_native_password"
+# 	host="localhost",
+# 	user="Drigil",
+# 	passwd="Anshul12",
+# 	database = "dbmsproject",
+# 	auth_plugin="mysql_native_password"
 
-)
+# )
 
-if(mydb.is_connected()):
-	print("Successfully Connected")
+# if(mydb.is_connected()):
+# 	print("Successfully Connected")
 
 
 def getCursor(mydb):
@@ -37,6 +37,11 @@ def getMovies(mycursor, productionHouse):
 	mycursor.execute(sql_query, productionHouseName)
 	arr = mycursor.fetchall()
 	return arr
+
+def getName(mycursor, PID):
+	sql = "SELECT Name from Production_Houses where PHID='%d'"%(PID)
+	mycursor.execute(sql)
+	return mycursor.fetchall()[0][0]
 
 def getMovieViewersFromMovie(mycursor, movie):
 	#Get the list of people who watched the given movie
