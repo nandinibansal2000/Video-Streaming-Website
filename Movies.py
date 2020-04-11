@@ -1,5 +1,5 @@
 import mysql.connector
-
+from flask import url_for
 def getSuggestion(mydb , UID) :
     mycursor = mydb.cursor()
     sql = "SELECT W.UID , count(*) FROM Watch_List W WHERE W.MovieID in (SELECT DISTINCT MovieID from Watch_List WHERE UID = '%d') GROUP BY W.UID HAVING count(*) > 0 ORDER BY count(*) DESC ;"%(UID)
@@ -60,6 +60,13 @@ def getProductionHouseID(mydb , MovieID) :
         return result[0][0]
     else :
         return result # if something is buggy
+def getProductionHouseName(mydb , MovieID) :
+    pid = getProductionHouseID(mydb , MovieID)
+    mycursor = mydb.cursor()
+    sql = "SELECT Name FROM Production_Houses WHERE PHID='%d'"%(pid)
+    mycursor.execute(sql)
+    result = mycursor.fetchall() ;
+    return result[0][0]
 def getOverall_Rating(mydb , MovieID) :
     mycursor = mydb.cursor()
     sql = "SELECT Overall_Rating FROM Movies WHERE Movie_id = '%d';"%(MovieID)
@@ -129,7 +136,23 @@ def getMovieID(mydb , Movie_Name) : # must be private for internal use only --> 
     else :
         return result # if something is buggy
 
-
+def getArtists(mydb, MovieID, img_addr):
+    mycursor = mydb.cursor()
+    sql = "SELECT Artists.Name from Starcast LEFT JOIN Artists ON Artists.ArtistID=Starcast.ArtistID WHERE Starcast.MovieID='%d'"%(MovieID)
+    mycursor.execute(sql)
+    result = mycursor.fetchall();
+    ans = """ """
+    for x in result:
+        ans += """<a href="#" class="list-group-item list-group-item-action">
+            <div class="card">
+              <img src="""+img_addr+""" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title" align="center">"""+x[0]+"""</h5>
+              </div>
+            </div>
+          </a>
+          </a>"""
+    return ans
 # "SELECT W.MovieID FROM Watch_List W WHERE W.UID in (SELECT W.UID , count(*) FROM Watch_List W WHERE W.MovieID in (SELECT DISTINCT MovieID from Watch_List WHERE UID = 1) GROUP BY W.UID HAVING count(*) > 0 ORDER BY count(*)) ;"
 
 # +----------------+--------------+------+-----+---------+-------+

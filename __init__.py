@@ -9,9 +9,9 @@ from MySQLdb import escape_string as thwart
 import gc
 import utkarsh
 import mysql.connector
-from passlib.hash import sha256_crypt
 import productionHouse
-
+import pygal
+import Movies
 
 app = Flask(__name__)
 
@@ -47,17 +47,29 @@ def userPage(UID):
 	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
 	return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1)
 
-@app.route('/movie/<int:UID>/<int:MovieID>')
+@app.route('/user/<int:UID>/movie/<int:MovieID>')
 def moviePage(UID, MovieID):
-	
+	name1 = Movies.getMovieName(mydb, MovieID)
+	genre1 = Movies.getGenre(mydb, MovieID)
+	imdb1 = Movies.getIMDB_Rating(mydb, MovieID)
+	prating1 = Movies.getBiasedRating(mydb, UID, MovieID)
+	duration1 = Movies.getDuration(mydb, MovieID)
+	img_addr = url_for('static', filename='images/actor.jpg')
+	artists = Movies.getArtists(mydb, MovieID, img_addr)
+	phouse1 = Movies.getProductionHouseName(mydb, MovieID)
 	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
-	return render_template("movie.html", hours=Hours1)
+	return render_template("movie.html", hours=Hours1, name=name1, genre=genre1, imdb=imdb1, prating=prating1, phouse=phouse1, duration=duration1, artist_embed=artists)
 
 @app.route('/pHouse/<int:PID>')
 def productionHousePage(PID):
 	mycursor = mydb.cursor()
 	name1 = productionHouse.getName(mycursor, PID)
-	return render_template("productionHouse.html", name=name1)
+	movies = productionHouse.getMovies(mycursor, name1)
+	upcoming_movies = productionHouse.getUpcomingMovies(mycursor, PID)
+	graph1 = productionHouse.graph1(mycursor, PID)
+	graph2 = productionHouse.graph2(mycursor, PID)
+	gvr = productionHouse.genreVSrating(mycursor, PID)
+	return render_template("productionHouse.html", name=name1, Movies_embed=movies, Upcoming_Movies_embed=upcoming_movies, chart1=graph1, chart2=graph2, genreVSrating=gvr)
 
 def user_signup(c,conn,username,password,designation,age):
 	c.execute("SELECT MAX(UID) FROM Users ")+1

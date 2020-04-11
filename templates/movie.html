@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Movie Name</title>
+	<title>{{ name }}</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
@@ -25,28 +25,27 @@
 		</div>
 		<div class="jumbotron jumbotron-fluid">
 		  <div class="container">
-		    <h1 class="display-4" align="center">Movie Name</h1>
+		    <h1 class="display-4" align="center">{{ name }}</h1>
 		    
 		  </div>
 		</div>
-		<img src="{{ url_for('static', filename='images/banner.jpg') }}" alt="Movie Banner" width="100%" >
+		<img src="{{ url_for('static', filename='images/banner.jpg') }}" class="img-fluid" alt="Movie Banner" width="100%">
 		<p></p>
 		<div class="jumbotron jumbotron-fluid">
 			<div class="container">
 			<h2>INFO</h2>
 			<div class="container">
-			<p>	     Genre:</p>
-			<p>	     Production House:</p>
-			<p>	     IMDB Rating:</p>
-			<p>	     Personalized Rating:</p>
-			<p>	     Duration:</p>
+			<p>	     Genre: {{ genre }} </p>
+			<p>	     Production House: {{ phouse }} </p>
+			<p>	     IMDB Rating: {{ imdb }}</p>
+			<p>	     Personalized Rating: {{prating}} </p>
+			<p>	     Duration: {{ duration }}</p>
 			</div>
 			</div>
 		</div>
 		<h1>Actors:</h1>
 		<div class="list-group list-group-horizontal">
-			<!-- Do this in for loop -->
-		  <a href="#" class="list-group-item list-group-item-action">
+		  <!-- <a href="#" class="list-group-item list-group-item-action">
 		    <div class="card">
 		      <img src="{{ url_for('static', filename='images/actor.jpg') }}" class="card-img-top" alt="...">
 		      <div class="card-body">
@@ -55,23 +54,8 @@
 		    </div>
 		  </a>
 		  </a>
-		  <a href="#" class="list-group-item list-group-item-action">
-		    <div class="card">
-		      <img src="{{ url_for('static', filename='images/actor.jpg') }}" class="card-img-top" alt="...">
-		      <div class="card-body">
-		        <h5 class="card-title" align="center">Artist Name</h5>
-		      </div>
-		    </div>
-		  </a>
-		  <a href="#" class="list-group-item list-group-item-action">
-		      <div class="card">
-		        <img src="{{ url_for('static', filename='images/actor.jpg') }}" class="card-img-top" alt="...">
-		        <div class="card-body">
-		          <h5 class="card-title" align="center">Artist Name</h5>
-		        </div>
-		      </div>
-		    </a>
-		  </a>
+		</div> -->
+		{{ artist_embed | safe }}
 		</div>
 	</div>
 

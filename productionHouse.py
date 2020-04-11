@@ -33,10 +33,14 @@ def getMovies(mycursor, productionHouse):
 	#Get movies corresponding to production house
 
 	productionHouseName = (productionHouse, )
-	sql_query = ("SELECT MOVIE_ID, GENRE FROM MOVIES WHERE P_HouseID IN (SELECT PHID FROM PRODUCTION_HOUSES WHERE NAME = (%s))")
+	sql_query = ("SELECT MOVIE_ID, MOVIE_NAME, GENRE FROM Movies WHERE P_HouseID IN (SELECT PHID FROM Production_Houses WHERE NAME = (%s))")
 	mycursor.execute(sql_query, productionHouseName)
 	arr = mycursor.fetchall()
-	return arr
+	# <!-- <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a> -->
+	ans = "" 
+	for x in arr:
+		ans += '<a href="#" class="list-group-item list-group-item-action">' + x[1] + '</a>' #insert link instead of #
+	return ans
 
 def getName(mycursor, PID):
 	sql = "SELECT Name from Production_Houses where PHID='%d'"%(PID)
@@ -47,7 +51,7 @@ def getMovieViewersFromMovie(mycursor, movie):
 	#Get the list of people who watched the given movie
 
 	movieID = (movie, )
-	sql_query = ("SELECT UID FROM WATCH_LIST WHERE MOVIEID = %s")
+	sql_query = ("SELECT UID FROM Watch_List WHERE MOVIEID = %s")
 	mycursor.execute(sql_query, movieID)		
 	arr = mycursor.fetchall()
 	return arr
@@ -63,19 +67,21 @@ def getMovieViewersFromMovieList(mycursor, movieList):
 	return viewerSet
 
 
-def getUpcomingMovies(mycursor, productionHouse):
+def getUpcomingMovies(mycursor, PHID):
 	#get upcoming movies corresponding to production house
 
-	productionHouseName = (productionHouse, )
-	sql_query = ("SELECT EMID FROM UPCOMING_MOVIES WHERE Production_HouseID IN (SELECT PHID FROM PRODUCTION_HOUSES WHERE NAME = (%s))")
-	mycursor.execute(sql_query, productionHouseName)
+	sql_query = ("SELECT * FROM Upcoming_movies WHERE Production_HouseID = '%d'")%(PHID)
+	mycursor.execute(sql_query)
 	arr = mycursor.fetchall()
-	return arr
+	ans = ""
+	for x in arr:
+		ans += "<tr> <td>'%s'</td> <td>'%s'</td> <td>'%s'</td> <td>'%s'</td> </tr>"%(x[1], x[2], x[3], x[5])
+	return ans
 
 def uploadMovie(mycursor, productionHouseID, name, IMDB, duration, genre):
 	#upload movie
 
-	sql_query = ("INSERT INTO MOVIES (P_HOUSEID, MOVIE_NAME, IMDB, DURATION, GENRE) VALUES (%s, %s, %s, %s, %s)")
+	sql_query = ("INSERT INTO Movies (P_HOUSEID, MOVIE_NAME, IMDB, DURATION, GENRE) VALUES (%s, %s, %s, %s, %s)")
 	entry = (productionHouseID, name, IMDB, duration, genre)
 	mycursor.execute(sql_query, entry)
 	#Uncomment when you want to make changes permanent
@@ -85,7 +91,7 @@ def uploadMovie(mycursor, productionHouseID, name, IMDB, duration, genre):
 def removeMovie(mycursor, movie):
 	#remove movie from name
 
-	sql_query = ("DELETE FROM MOVIES WHERE MOVIE_NAME = %s")
+	sql_query = ("DELETE FROM Movies WHERE MOVIE_NAME = %s")
 	movieName = (movie, )
 	mycursor.execute(sql_query, movieName)
 	# mycursor.execute("SELECT * FROM MOVIES")
@@ -97,7 +103,7 @@ def getMovieRatingFromID(mycursor, movie):
 	#Get rating according to movie
 
 	movieID = (movie, )
-	sql_query = ("SELECT AVG(RATING) FROM WATCH_LIST WHERE MOVIEID = %s")
+	sql_query = ("SELECT AVG(RATING) FROM Watch_List WHERE MOVIEID = %s")
 	mycursor.execute(sql_query, movieID)
 	avg = mycursor.fetchone()
 	avg = avg[0]
@@ -108,7 +114,7 @@ def groupUsersByAge (mycursor, userlist):
 	#get number of users belonging to a particular age
 
 	userTuple = tuple(userlist)
-	sql_query = ("SELECT AGE, COUNT(UID) FROM USERS WHERE UID IN {} GROUP BY AGE").format(userTuple)
+	sql_query = ("SELECT AGE, COUNT(UID) FROM Users WHERE UID IN {} GROUP BY AGE").format(userTuple)
 	mycursor.execute(sql_query)
 	arr = mycursor.fetchall()
 	return arr
@@ -128,6 +134,16 @@ def groupMoviesByGenre (mycursor, movieList):
 	for i in ratingDict.keys():
 		ratingDict[i] = sum(ratingDict[i])/len(ratingDict[i])
 	return ratingDict
+
+def genreVSrating(mycursor, PHID):
+	sql_query = "SELECT MOVIE_ID, GENRE FROM Movies WHERE P_HouseID='%d'"%(PHID)
+	mycursor.execute(sql_query)
+	arr = mycursor.fetchall()
+	d = groupMoviesByGenre (mycursor, arr)
+	ans = ""
+	for x in d:
+		ans += "<tr> <td>'%s'</td> <td>'%s'</td> </tr>"%(x, d[x])
+	return ans
 
 
 
@@ -157,14 +173,30 @@ def graphGenreVSMovies(inpDict):
 	line_chart.title = "Ratings corresponding to each Genre"
 	for i in inpDict:
 		line_chart.add(i, inpDict[i])
-	line_chart.render_in_browser()
+	return line_chart.render_data_uri()
 
 def graphUsersVSAge(inpSet):
 	line_chart = pygal.HorizontalBar()
 	line_chart.title = "Number of users corresponding to Age"
 	for i in inpSet:
 		line_chart.add(str(i[0]), i[1])
-	line_chart.render_in_browser()
+	return line_chart.render_data_uri()
+
+def graph1(mycursor, PHID):
+	sql_query = "SELECT MOVIE_ID, GENRE FROM Movies WHERE P_HouseID='%d'"%(PHID)
+	mycursor.execute(sql_query)
+	arr = mycursor.fetchall()
+	arr2 = groupMoviesByGenre(mycursor, arr)
+	ans = graphGenreVSMovies(arr2)
+	return ans
+
+def graph2(mycursor, PHID):
+	sql_query = "SELECT MOVIE_ID, GENRE FROM Movies WHERE P_HouseID='%d'"%(PHID)
+	mycursor.execute(sql_query)
+	arr = mycursor.fetchall()
+	arr3 = getMovieViewersFromMovieList(mycursor, arr)
+	arr4 = groupUsersByAge(mycursor, arr3)
+	return graphUsersVSAge(arr4)
 
 ######################################################################################
 
