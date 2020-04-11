@@ -1,5 +1,5 @@
 import mysql.connector
-from flask import url_for
+
 def getSuggestion(mydb , UID) :
     mycursor = mydb.cursor()
     sql = "SELECT W.UID , count(*) FROM Watch_List W WHERE W.MovieID in (SELECT DISTINCT MovieID from Watch_List WHERE UID = '%d') GROUP BY W.UID HAVING count(*) > 0 ORDER BY count(*) DESC ;"%(UID)
