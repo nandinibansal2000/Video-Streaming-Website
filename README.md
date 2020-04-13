@@ -3,11 +3,11 @@
 To be done -
 * Merchandise
   1. Queries
-    * Merch for home page
-    * Merch for movies page
-    * Merch for artist page
-    * Merch for production house page
-    * Merch for user page
+      * Merch for home page
+      * Merch for movies page
+      * Merch for artist page
+      * Merch for production house page
+      * Merch for user page
   2. Webpage
 * Webpage
   * Artist page
