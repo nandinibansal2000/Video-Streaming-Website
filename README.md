@@ -23,6 +23,7 @@ To be done -
     1. Nav-bar
     2. Button for movies
     3. create productionHouse page for user view
+    4. Upload Movie
   * Home Page
 * Indexing and query/database optimisation (Week 6, 7)
 * Update doc and ER Model
