@@ -1,70 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-* {box-sizing: border-box;}
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-}
+  <!-- <title>TheEvent Bootstrap Template - Index</title> -->
+  <meta content="" name="descriptison">
+  <meta content="" name="keywords">
 
-.topnav {
-  overflow: hidden;
-  background-color: #e9e9e9;
-}
+  <!-- Favicons -->
+ 
+   <link href="{{url_for('static', filename='/assets/img/favicon.png')}}" rel="icon">
+      <link href="{{url_for('static', filename='/assets/img/favicon.png')}}" rel="icon">
 
-.topnav a {
-  float: left;
-  display: block;
-  color: black;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-}
 
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800" rel="stylesheet">
 
-.topnav a.active {
-  background-color: #2196F3;
-  color: white;
-}
+  <!-- Vendor CSS Files -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="{{url_for('static', filename='/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename='/assets/vendor/animate.css/animate.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename='/assets/vendor/venobox/venobox.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename='/assets/vendor/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename='/assets/vendor/owl.carousel/assets/owl.carousel.min.css')}}" rel="stylesheet">
 
-.topnav .login-container {
-  float: right;
-}
+  <!-- Template Main CSS File -->
+  <link href="{{url_for('static', filename='/assets/css/style.css')}}" rel="stylesheet">
 
-.topnav input[type=text] {
-  padding: 6px;
-  margin-top: 8px;
-  font-size: 17px;
-  border: none;
-  width:120px;
-}
-
-.topnav .login-container button {
-  float: right;
-  padding: 6px 10px;
-  margin-top: 8px;
-  margin-right: 16px;
-  background-color: #555;
-  color: white;
-  font-size: 17px;
-  border: none;
-  cursor: pointer;
-}
-
-.topnav .login-container button:hover {
-  background-color: green;
-}
-/*-------------------------------------*/
-/* Full-width input fields */
-#loginPopup input[type=text], input[type=password] {
+  <!-- =======================================================
+  * Template Name: TheEvent - v2.0.0
+  * Template URL: https://bootstrapmade.com/theevent-conference-event-bootstrap-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+  <style>
+    #loginPopup input[type=text], input[type=password] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -136,7 +108,7 @@ body {
   background-color: #fefefe;
   margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 40%; /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button (x) */
@@ -181,29 +153,131 @@ body {
      width: 100%;
   }
 }
-/*-------------------------------------*/
 
-
-@media screen and (max-width: 600px) {
-  .topnav .login-container {
-    float: none;
-  }
-  .topnav a, .topnav input[type=text], .topnav .login-container button {
-    float: none;
-    display: block;
-    text-align: left;
-    width: 100%;
-    margin: 0;
-    padding: 14px;
-  }
-  .topnav input[type=text] {
-    border: 1px solid #ccc;  
-  }
-
+/*================================*/
+/* Set a style for all buttons */
+   #loginPopup1 input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
 }
-</style>
+#loginPopup1 button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+#loginPopup1 button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+#loginPopup1 .cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+/* Center the image and position the close button */
+#loginPopup1 .imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+#loginPopup1 img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+#loginPopup1 .container {
+  padding: 16px;
+}
+
+#loginPopup1 span.psw {
+  float: right;
+  padding-top: 16px;
+}
+.modal1 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+#loginPopup1 .modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 40%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+#loginPopup1 .close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+#loginPopup1 .close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+#loginPopup1 .animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+#loginPopup1 @-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+#loginPopup1 @keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+#loginPopup1 @media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+
+
+    
+  </style>
 </head>
+
 <body>
+  <!-- LoginPop form -->
+
   <div id="loginPopup" class="modal">
   
   <form method="POST" class="modal-content animate" action="" >
@@ -233,34 +307,64 @@ body {
       </button>
         </div>
 
-    
-  </form>
-</div>
-
-
-<div class="topnav">
-  <a class="active" href="#home">Home</a>
-  <a href="#about">About</a>
- 
-  <button class="sign" onclick="openForm()">Signup</button>
-
-  <div class="login-container">
-    <form method="POST" action="">
-      <input type="text" placeholder="Username" name="name">
-      <input type="text" placeholder="Password" name="pass">
-      <!-- <input type="text" placeholder="Confirm" name="confirm"> -->
-
-      <button type="submit" value="Send">login</button>
+      
     </form>
   </div>
-</div>
+  <!-- loginpop1 -->
+   <div id="loginPopup1" class="modal1">
+  
+  <form method="POST" class="modal-content animate" action="" >
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('loginPopup1').style.display='none'" class="close" title="Close Modal">&times;</span>
+      <img src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png" alt="Avatar" class="avatar">
+    </div>
 
-<div style="padding-left:16px">
-  <h2>HEY</h2>
- 
-</div>
+    <div class="container">
+      <label for="name"><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="name" required>
+
+      <label for="pass"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="pass" required>
+
+      
+         
+     
+
+      <button type="submit"  value="Send" onclick="closeForm1()">Login
+      </button>
+        </div>
+
+      
+    </form>
+  </div>
+
+  <!-- ======= Header ======= -->
+  <header id="header">
+    <div class="container">
+
+      <div id="logo" class="pull-left">
+        <!-- Uncomment below if you prefer to use a text logo -->
+        <!-- <h1><a href="#intro">The<span>Event</span></a></h1>-->
+        <a href="index.html" class="scrollto"><img src="{{url_for('static', filename='/images/logo.png')}}" height ="200" width ="70" alt="" title=""><b>ESCAPE THE WHITE CHAR*</b></a>
+      </div>
+
+      <nav id="nav-menu-container">
+        <ul class="nav-menu">
+          <li class="menu-active"><a href="main.html">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li> <a href="javascript:openForm()">Signup</a></li>
+          <li> <a href="javascript:openForm1()">Login</a></li>
+          
+        </ul>
+      </nav><!-- #nav-menu-container -->
+    </div>
+  </header><!-- End Header -->
+
 
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+  cycleBackgrounds(2000);
+});
 function openForm() {
   document.getElementById("loginPopup").style.display = "block";
 }
@@ -268,6 +372,220 @@ function openForm() {
 function closeForm() {
   document.getElementById("loginPopup").style.display = "none";
 }
+function openForm1() {
+  document.getElementById("loginPopup1").style.display = "block";
+}
+
+function closeForm1() {
+  document.getElementById("loginPopup1").style.display = "none";
+}
 </script>
+
+
+  <!-- ======= Intro Section ======= -->
+  <section id="intro">
+    <div class="intro-container wow fadeIn">
+      <h1 class="mb-4 pb-0">WATCH YOUR<br><span>FAVOURITE</span> MOVIES HERE!</h1>
+   
+      <a href="" class="venobox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>
+      <a href="#about" class="about-btn scrollto">About Us</a>
+    </div>
+  </section><!-- End Intro Section -->
+
+  <main id="main">
+
+    <!-- ======= About Section ======= -->
+    <section id="about">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <h2>About Us</h2>
+            <p>We have tried to build a platform where you can watch the latest movies. You will be suggested movies according to the recommendations of users of the same taste.
+            Not only this here you can buy the attires of your favourite Actors.</p>
+          </div>
+          <div class="col-lg-3">
+            <br>
+            <h3>Signup  today  to  enjoy  your  favourite movies!!</h3>
+            <p></p>
+          </div>
+
+        </div>
+      </div>
+    </section><!-- End About Section -->
+
+    <!-- ======= Speakers Section ======= -->
+    <section id="speakers" class="wow fadeInUp">
+      <div class="container">
+        <div class="section-header">
+          <h2>OUR TEAM</h2>
+          <!-- <p>Here are some of our speakers</p> -->
+        </div>
+
+        <div class="row">
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="{{url_for('static', filename='/assets/img/speakers/1.jpg')}}" alt="Speaker 1" class="img-fluid">
+              <div class="details">
+                <h3><a href="speaker-details.html">Anikait Sahota</a></h3>
+                <p>Quas alias incidunt</p>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-google-plus"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="{{url_for('static', filename='/assets/img/speakers/2.jpg')}}" alt="Speaker 2" class="img-fluid">
+              <div class="details">
+                <h3><a href="speaker-details.html">Anshul Mendiratta</a></h3>
+                <p>Consequuntur odio aut</p>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-google-plus"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="{{url_for('static', filename='/assets/img/speakers/2.jpg')}}" alt="Speaker 3" class="img-fluid">
+              <div class="details">
+                <h3><a href="speaker-details.html">Nandini</a></h3>
+                <p>Fugiat laborum et</p>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-google-plus"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="{{url_for('static', filename='/assets/img/speakers/2.jpg')}}" alt="Speaker 4" class="img-fluid">
+              <div class="details">
+                <h3><a href="speaker-details.html">Sanskar Sachdeva</a></h3>
+                <p>Debitis iure vero</p>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-google-plus"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="{{url_for('static', filename='/assets/img/speakers/2.jpg')}}" alt="Speaker 5" class="img-fluid">
+              <div class="details">
+                <h3><a href="speaker-details.html">Utkarsh Sharma</a></h3>
+                <p>Qui molestiae natus</p>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-google-plus"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="{{url_for('static', filename='/assets/img/speakers/2.jpg')}}" alt="Speaker 6" class="img-fluid">
+              <div class="details">
+                <h3><a href="speaker-details.html">Willow Trantow</a></h3>
+                <p>Non autem dicta</p>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-google-plus"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section><!-- End Speakers Section -->
+
+   
+        
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+
+       
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h4>Contact Us</h4>
+            <p>
+            
+             
+              <strong>Email:</strong> info@example.com<br>
+              <strong>Email:</strong> info@example.com<br>
+              <strong>Email:</strong> info@example.com<br>
+              <strong>Email:</strong> info@example.com<br>
+              <strong>Email:</strong> info@example.com<br>
+            </p>
+
+            <div class="social-links">
+              <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+              <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+              <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
+              <a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
+              <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong>TheEvent</strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        <!--
+        All the links in the footer should remain intact.
+        You can delete the links only if you purchased the pro version.
+        Licensing information: https://bootstrapmade.com/license/
+        Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=TheEvent
+      -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+  </footer><!-- End  Footer -->
+
+  <a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{{url_for('static', filename='/assets/vendor/jquery/jquery.min.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/jquery.easing/jquery.easing.min.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/php-email-form/validate.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/wow/wow.min.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/venobox/venobox.min.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/owl.carousel/owl.carousel.min.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/superfish/superfish.min.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/hoverIntent/hoverIntent.js')}}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{{url_for('static', filename='/assets/js/main.js')}}"></script>
+
 </body>
+
 </html>
