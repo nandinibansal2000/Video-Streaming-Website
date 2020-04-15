@@ -27,4 +27,4 @@ To be done -
   * Home Page
 * Indexing and query/database optimisation (Week 6, 7)
 * Update doc and ER Model
-Algebraic Queries
+* Algebraic Queries

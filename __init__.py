@@ -39,13 +39,18 @@ def Dashboard():
 def register():
     return render_template("register.html")
 
-@app.route('/user/<int:UID>')
+@app.route('/user/<int:UID>', methods=['GET', 'POST'])
 def userPage(UID):
-	
 	name1 = utkarsh.getName(mydb, UID)[0][0]
 	LoginID1 = utkarsh.getLoginID(mydb, UID)[0][0]
 	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
-	return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1)
+	if request.method == 'GET':		
+		return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1)
+	elif request.method == 'POST':
+		movie_name = request.form["search_movie"]
+		print(movie_name)
+		search_movie_result = utkarsh.searchMovie(mydb, movie_name, UID)
+		return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, search_movie_result_embed=search_movie_result)
 
 @app.route('/user/<int:UID>/movie/<int:MovieID>')
 def moviePage(UID, MovieID):

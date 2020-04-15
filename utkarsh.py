@@ -48,12 +48,16 @@ def refreshAverageTime():
 	# Calculate average time from WatchHistory and Update AvgTime in Users
 	pass
 
-def searchMovie(mydb, movieName):
+def searchMovie(mydb, movieName, input_UID):
 	mycursor = mydb.cursor()
 	movieName = '%'+movieName+'%'
-	sql = "SELECT Movie_id FROM Movies WHERE Movie_Name LIKE '%s'"%(movieName)
+	sql = "SELECT Movie_id, Movie_Name FROM Movies WHERE Movie_Name LIKE '%s'"%(movieName)
 	mycursor.execute(sql)
-	return  mycursor.fetchall()
+	myresult =  mycursor.fetchall()
+	ans = ""
+	for x in myresult:
+		ans += '<a href="/user/'+str(input_UID)+'/movie/'+str(x[0])+'">'+'<button type="button" class="btn btn-light">'+str(x[1])+'</button>'+'</a>'
+	return ans
 
 def getSuggestions(mydb):
 	pass
