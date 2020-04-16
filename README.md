@@ -12,19 +12,14 @@ To be done -
 * Webpage
   * Artist page
   * User Page
-    1. Search Movies
-    2. Nav-bar buttons
-    3. Suggested movies dynamic
-    4. Make payment
+    1. Suggested movies dynamic
+    2. Make payment
   * Movie Page
-    1. Watch movie and take ratings
-    2. Button for actors
+    1. Watch movie and take ratings (popup)
+    2. Button for actors (popup info)
   * Production House
-    1. Nav-bar
-    2. Button for movies
-    3. create productionHouse page for user view
-    4. Upload Movie
-  * Home Page
+    1. Button for movies - popup for some info
+    2. Upload Movie
 * Indexing and query/database optimisation (Week 6, 7)
 * Update doc and ER Model
 * Algebraic Queries
