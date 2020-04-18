@@ -39,6 +39,17 @@ def Dashboard():
 @app.route('/register')
 def register():
     return render_template("register.html")
+@app.route("/payment/", methods=['POST'])
+def payment():
+
+	if request.method == "POST":
+		if( "user" in request.form):
+			print("userrrrr")
+		if( "family" in request.form):
+			print("familyyyy")
+		#Moving forward code
+	print("Moving Forward...")
+	return render_template('main.html')
 
 @app.route('/user/<int:UID>', methods=['GET', 'POST'])
 def userPage(UID):
