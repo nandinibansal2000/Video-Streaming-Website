@@ -6,9 +6,118 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<!-- <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet"> -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<style>
+		 <style>
+    #paymentPopup input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+#paymentPopup button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+#paymentPopup button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+#paymentPopup .cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+/* Center the image and position the close button */
+
+
+
+#paymentPopup .container {
+  padding: 16px;
+}
+
+
+/* The Modal (background) */
+ .modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+#paymentPopup .modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 40%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+#paymentPopup .close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+#paymentPopup .close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+#paymentPopup .animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+#paymentPopup @-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+#paymentPopup @keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+#paymentPopup @media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+
+	</style>
 </head>
 <body>
-	<div class="modal fade" id="paymentPopup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- 	<div class="modal fade" id="paymentPopup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <form method="POST" class="modal-content animate" action="" >
@@ -18,6 +127,26 @@
 	    </div>
 	  </div>
 	</div>
+ -->
+	<div id="paymentPopup" class="modal">
+  
+  <form method="POST" class="modal-content animate" action="/payment/" >
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('paymentPopup').style.display='none'" class="close" title="Close Modal">&times;</span>
+    </div>
+
+    <div class="container">
+   
+    	<H1>Payment as</H1>
+      <a href="/your_flask_funtion1">  <button type="submit" name="user" value="Send">User   </button></a>
+
+        <a href="/your_flask_funtion2"> <button type="submit" name="family" value="Send">Family</button>  </a>
+        </div>
+
+      
+    </form>
+  </div>
+
 <!-- 	<div id="paymentPopup" class="modal">
 		<form method="POST" class="modal-content animate" action="" >
 			<button type="submit" name="payment" value="user" onclick="closeForm()">User</button>   
@@ -28,7 +157,7 @@
 		<div class="pos-f-t">
 		  <div class="collapse" id="navbarToggleExternalContent">
 		    <div class="bg-dark p-4">
-		      <button type="button" class="btn btn-secondary btn-lg btn-block" data-toggle="modal" data-target="#paymentPopup">Make Payment</button>
+		      <button type="button" class="btn btn-secondary btn-lg btn-block" data-toggle="modal" onclick="openForm()">Make Payment</button>
 		      <p></p>
 		      <a href="/"><button type="button" name="logout_button" class="btn btn-secondary btn-lg btn-block">Log Out</button></a>
 		    </div>
