@@ -138,12 +138,12 @@ def getMovieID(mydb , Movie_Name) : # must be private for internal use only --> 
 
 def getArtists(mydb, MovieID, img_addr):
     mycursor = mydb.cursor()
-    sql = "SELECT Artists.Name from Starcast LEFT JOIN Artists ON Artists.ArtistID=Starcast.ArtistID WHERE Starcast.MovieID='%d'"%(MovieID)
+    sql = "SELECT Artists.Name, Artists.ArtistID from Starcast LEFT JOIN Artists ON Artists.ArtistID=Starcast.ArtistID WHERE Starcast.MovieID='%d'"%(MovieID)
     mycursor.execute(sql)
     result = mycursor.fetchall();
     ans = """ """
     for x in result:
-        ans += """<a href="#" class="list-group-item list-group-item-action">
+        ans += """<a href="/artist/"""+str(x[1])+""" " class="list-group-item list-group-item-action">
             <div class="card">
               <img src="""+img_addr+""" class="card-img-top" alt="...">
               <div class="card-body">

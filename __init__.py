@@ -66,6 +66,19 @@ def moviePage(UID, MovieID):
 	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
 	return render_template("movie.html", hours=Hours1, name=name1, genre=genre1, imdb=imdb1, prating=prating1, phouse=phouse1, duration=duration1, artist_embed=artists)
 
+@app.route('/movie/<int:MovieID>')
+def movieInfoPage(MovieID):
+	name1 = Movies.getMovieName(mydb, MovieID)
+	genre1 = Movies.getGenre(mydb, MovieID)
+	imdb1 = Movies.getIMDB_Rating(mydb, MovieID)
+	duration1 = Movies.getDuration(mydb, MovieID)
+	img_addr = url_for('static', filename='images/actor.jpg')
+	artists = Movies.getArtists(mydb, MovieID, img_addr)
+	phouse1 = Movies.getProductionHouseName(mydb, MovieID)
+
+	return render_template("movie_info.html", name=name1, genre=genre1, imdb=imdb1, phouse=phouse1, duration=duration1, artist_embed=artists)
+
+
 @app.route('/pHouse/<int:PID>')
 def productionHousePage(PID):
 	mycursor = mydb.cursor()

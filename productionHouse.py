@@ -39,7 +39,7 @@ def getMovies(mycursor, productionHouse):
 	# <!-- <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a> -->
 	ans = "" 
 	for x in arr:
-		ans += '<a href="#" class="list-group-item list-group-item-action">' + x[1] + '</a>' #insert link instead of #
+		ans += '<a href="/movie/'+str(x[0])+'" class="list-group-item list-group-item-action">' + x[1] + '</a>' #insert link instead of #
 	return ans
 
 def getName(mycursor, PID):
