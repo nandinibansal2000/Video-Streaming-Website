@@ -51,6 +51,15 @@ def payment():
 	print("Moving Forward...")
 	return render_template('main.html')
 
+@app.route("/Rating/", methods=['POST'])
+def Rating():
+
+	if request.method == "POST":
+		if( "rate" in request.form):
+			rating = request.form["rating"]
+			print(rating,"hhhhhhhhhhhhhh")
+	return render_template('main.html')
+
 @app.route('/user/<int:UID>', methods=['GET', 'POST'])
 def userPage(UID):
 	name1 = utkarsh.getName(mydb, UID)[0][0]
