@@ -33,7 +33,7 @@ def top_genre(mydb, input_Artist_ID):
     # in a table.
     
     mycursor= mydb.cursor()
-    sql= "select Genre, max(Overall_Rating) from Movies where Movie_id in(select MovieID from Starcast where ArtistID= '%d')"%(input_Artist_ID)
+    sql= "select Genre, Overall_Rating from Movies where Movie_id in(select MovieID from Starcast where ArtistID= '%d')"%(input_Artist_ID)
     mycursor.execute(sql)
     result = mycursor.fetchall() ;
     if( len(result) == 0 ) :
