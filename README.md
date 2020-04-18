@@ -11,14 +11,13 @@ To be done -
   2. Webpage
 * Webpage
   * Artist page
+    1. Top_genre query not working
   * User Page
     1. Suggested movies dynamic
     2. Make payment
   * Movie Page
     1. Watch movie and take ratings (popup)
-    2. Button for actors (popup info)
   * Production House
-    1. Button for movies - popup for some info
     2. Upload Movie
 * Indexing and query/database optimisation (Week 6, 7)
 * Update doc and ER Model

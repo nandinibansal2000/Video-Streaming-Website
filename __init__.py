@@ -49,39 +49,44 @@ def upload():
 			#Moving forward code
 			print("Moving Forward...")
 	return render_template('main.html')
-@app.route("/payment/", methods=['POST'])
-def payment():
-
+@app.route("/payment/<UID>", methods=['POST'])
+def payment(UID):
+	UID = int(UID)
 	if request.method == "POST":
 		if( "user" in request.form):
-			print("userrrrr")
+			utkarsh.makePaymentForUser(mydb, UID)
 		if( "family" in request.form):
-			print("familyyyy")
+			utkarsh.makePaymentForUser(mydb, UID)
 		#Moving forward code
 	print("Moving Forward...")
-	return render_template('main.html')
+	return redirect(url_for('userPage', UID=UID))
 
-@app.route("/Rating/", methods=['POST'])
-def Rating():
+@app.route("/Rating/<UID>/<MovieID>", methods=['POST'])
+def Rating(UID, MovieID):
 
 	if request.method == "POST":
 		if( "rate" in request.form):
 			rating = request.form["rating"]
-			print(rating,"hhhhhhhhhhhhhh")
-	return render_template('main.html')
+			utkarsh.watchNewMovie(mydb, int(UID), int(MovieID), int(rating))
+	return redirect(url_for('userPage', UID=int(UID)))
 
 @app.route('/user/<int:UID>', methods=['GET', 'POST'])
 def userPage(UID):
 	name1 = utkarsh.getName(mydb, UID)[0][0]
 	LoginID1 = utkarsh.getLoginID(mydb, UID)[0][0]
 	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
+	url1 = "/payment/"+str(UID)
 	if request.method == 'GET':		
-		return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1)
+		return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, url=url1)
 	elif request.method == 'POST':
-		movie_name = request.form["search_movie"]
-		print(movie_name)
-		search_movie_result = utkarsh.searchMovie(mydb, movie_name, UID)
-		return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, search_movie_result_embed=search_movie_result)
+		try:
+			movie_name = request.form["search_movie"]
+			print(movie_name)
+			search_movie_result = utkarsh.searchMovie(mydb, movie_name, UID)
+			return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, search_movie_result_embed=search_movie_result, url=url1)
+		except:
+			return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, url=url1)
+
 
 @app.route('/user/<int:UID>/movie/<int:MovieID>')
 def moviePage(UID, MovieID):
@@ -94,7 +99,8 @@ def moviePage(UID, MovieID):
 	artists = Movies.getArtists(mydb, MovieID, img_addr)
 	phouse1 = Movies.getProductionHouseName(mydb, MovieID)
 	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
-	return render_template("movie.html", hours=Hours1, name=name1, genre=genre1, imdb=imdb1, prating=prating1, phouse=phouse1, duration=duration1, artist_embed=artists)
+	url1 = "/Rating/"+str(UID)+"/"+str(MovieID)
+	return render_template("movie.html", hours=Hours1, name=name1, genre=genre1, imdb=imdb1, prating=prating1, phouse=phouse1, duration=duration1, artist_embed=artists, url=url1)
 
 @app.route('/movie/<int:MovieID>')
 def movieInfoPage(MovieID):
