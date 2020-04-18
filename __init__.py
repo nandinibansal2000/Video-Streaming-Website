@@ -39,6 +39,16 @@ def Dashboard():
 @app.route('/register')
 def register():
     return render_template("register.html")
+
+@app.route("/upload/", methods=['POST'])
+def upload():
+
+	if request.method == "POST":
+		if( "upload" in request.form):
+		
+			#Moving forward code
+			print("Moving Forward...")
+	return render_template('main.html')
 @app.route("/payment/", methods=['POST'])
 def payment():
 
