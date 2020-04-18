@@ -5,8 +5,141 @@
 	<title>{{ name }}</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<style>
+		   #RatingPopup input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+#RatingPopup button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+#RatingPopup button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+#RatingPopup .cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+/* Center the image and position the close button */
+
+
+
+#RatingPopup .container {
+  padding: 16px;
+}
+
+
+/* The Modal (background) */
+ .modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+#RatingPopup .modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 40%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+#RatingPopup .close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+#RatingPopup .close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+#RatingPopup .animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+#RatingPopup @-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+#RatingPopup @keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+#RatingPopup @media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+	</style>
 </head>
 <body>
+
+  <div id="RatingPopup" class="modal">
+  
+  <form method="POST" class="modal-content animate" action="/Rating/" >
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('RatingPopup').style.display='none'" class="close" title="Close Modal">&times;</span>
+    
+    </div>
+
+    <div class="container">
+    	<h1></h1>
+    	<h4>You Have Watched The Movie!</h4>
+      <label for="uname"><b>Please Rate the moive (1-10)</b></label>
+      <input type="text" placeholder="Enter The rating" name="rating" required>
+
+     
+         
+     
+
+      <button type="submit" name="rate" value="Send" onclick="closeForm()">Submit
+      </button>
+        </div>
+
+      
+    </form>
+  </div>
 	<div class="container" id="head">
 		<div class="pos-f-t">
 		  <div class="collapse" id="navbarToggleExternalContent">
@@ -29,7 +162,7 @@
 		    
 		  </div>
 		</div>
-		<img src="{{ url_for('static', filename='images/banner.jpg') }}" class="img-fluid" alt="Movie Banner" width="100%">
+		<img onclick="javascript:openForm()" src="{{ url_for('static', filename='images/banner.jpg') }}" class="img-fluid" alt="Movie Banner" width="100%">
 		<p></p>
 		<div class="jumbotron jumbotron-fluid">
 			<div class="container">
@@ -58,7 +191,15 @@
 		{{ artist_embed | safe }}
 		</div>
 	</div>
+	<script>
+		function openForm() {
+		  document.getElementById("RatingPopup").style.display = "block";
+		}
 
+		function closeForm() {
+		  document.getElementById("RatingPopup").style.display = "none";
+		}
+	</script>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
