@@ -1,15 +1,15 @@
 #Sanskar sachdeva
 #Artist
 
-import mysql.connector
-from passlib.hash import sha256_crypt
-mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  passwd="qwerty2799"
-)
-if(mydb.is_connected()):
-	print("Successfully Connected")
+# import mysql.connector
+# from passlib.hash import sha256_crypt
+# mydb = mysql.connector.connect(
+#   host="localhost",
+#   user="root",
+#   passwd="qwerty2799"
+# )
+# if(mydb.is_connected()):
+# 	print("Successfully Connected")
 #SQL Queries
 
 def get_specific_movie(mydb, input_Artist_ID):   
@@ -22,10 +22,11 @@ def get_specific_movie(mydb, input_Artist_ID):
     result = mycursor.fetchall() ;
     if( len(result) == 0 ) :
         return None
-    elif( len(result) == 1 ) :
-        return result[0][0]
     else :
-        return result
+        ans = ""
+        for x in result:
+            ans += "<tr> <td>'%s'</td> <td>'%s'</td> </tr>"%(x[0], x[1])
+        return ans
 
 def top_genre(mydb, input_Artist_ID):    
     # this would return the genres with their respective ranks
@@ -68,7 +69,7 @@ def artist_info(mydb, input_Artist_ID):
     if( len(result) == 0 ) :
         return None
     elif( len(result) == 1 ) :
-        return result[0][0]
+        return result[0]
     else :
         return result
 

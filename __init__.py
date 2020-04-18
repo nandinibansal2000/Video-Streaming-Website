@@ -12,6 +12,7 @@ import mysql.connector
 import productionHouse
 import pygal
 import Movies
+import Artist
 
 app = Flask(__name__)
 
@@ -75,6 +76,17 @@ def productionHousePage(PID):
 	graph2 = productionHouse.graph2(mycursor, PID)
 	gvr = productionHouse.genreVSrating(mycursor, PID)
 	return render_template("productionHouse.html", name=name1, Movies_embed=movies, Upcoming_Movies_embed=upcoming_movies, chart1=graph1, chart2=graph2, genreVSrating=gvr)
+
+@app.route('/artist/<int:AID>')
+def artistPage(AID):
+	name1 = Artist.artist_info(mydb, AID)[0]
+	age1 = Artist.artist_info(mydb, AID)[1]
+	#genre = Artist.top_genre(mydb, AID)
+	genre = "Action"
+	uRating = Artist.artist_rating(mydb, AID)
+	imdb1 = Artist.artist_official_rating(mydb, AID)
+	table1 = Artist.get_specific_movie(mydb, AID)
+	return render_template("artists.html", name=name1, age=age1, top_genre=genre, user_rating=uRating, imdb=imdb1, table=table1)
 
 def user_signup(c,conn,username,password,designation,age):
 	c.execute("SELECT MAX(UID) FROM Users ")+1
