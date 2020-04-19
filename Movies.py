@@ -18,7 +18,7 @@ def getSuggestion(mydb , UID) :
             else :
                 MovieList[m[0]] = i[1]/( result[0][1] * (len(result)-1) )
     # print(MovieList , list(MovieList.items()))
-    return list(MovieList.items()) # return MovieID and Weighted_similarity (diff from biased rating)
+    return list(MovieList.items())[:3] # return MovieID and Weighted_similarity (diff from biased rating)
 def getBiasedRating(mydb , UID , MovieID) :
     mycursor = mydb.cursor()
     sql = "SELECT W.UID , W.Rating FROM Watch_List W WHERE W.MovieID = '%d' and UID != '%d' ;"%(MovieID , UID)
@@ -41,6 +41,8 @@ def getBiasedRating(mydb , UID , MovieID) :
         mycursor.execute(sql) # Count number of movies watched by both users;
         similarity = int(mycursor.fetchall()[0][0]) / UID_num_movies  # weighteg the similarity with Number of movies matched by total movies
         BiasedRating += similarity * float(person[1]) / len(personList) # calculating Weighted mean
+    if(BiasedRating == 0) :     # UID have no person with similar taste and have watched the movie also
+        return (getOverall_Rating(mydb,MovieID) + getIMDB_Rating(mydb,MovieID))/2
     return BiasedRating
 def getMovieName(mydb , MovieID) :
     mycursor = mydb.cursor()
