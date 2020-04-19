@@ -26,7 +26,7 @@ mydb = mysql.connector.connect(
 	  host="localhost",
 	  user="user",
 	  passwd="password",
-	  database="myDB2"
+	  database="newdb"
 	)
 
 @app.route('/')
@@ -51,7 +51,7 @@ def upload(PID):
 			IMDB = request.form["imdb"]
 			print(PID, name, IMDB, duration, genre)
 			productionHouse.uploadMovie(mydb, PID, name, IMDB, duration, genre)
-	return redirect(url_for('productionHousePage', PID))
+	return redirect(url_for('productionHousePage', PID=PID))
 @app.route("/payment/<UID>", methods=['POST'])
 def payment(UID):
 	UID = int(UID)

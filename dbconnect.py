@@ -7,7 +7,7 @@ def connection():
 	conn=MySQLdb.connect(host="localhost",
 						user="user",
 						passwd="password",
-						db="myDB2")
+						db="newdb")
 	c=conn.cursor()
 	return c,conn
 

@@ -13,8 +13,7 @@ To be done -
   * User Page
     1. Suggested movies dynamic
   * Production House
-    1. Upload Movie - Test on new database
-    2. Production House rank (optional)
+    1. Production House rank (optional)
 * Indexing and query/database optimisation (Week 6, 7)
   1. Drop subscription type in user
   2. Need of UIDs in Family Table (drop them)
