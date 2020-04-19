@@ -78,14 +78,14 @@ def getUpcomingMovies(mycursor, PHID):
 		ans += "<tr> <td>'%s'</td> <td>'%s'</td> <td>'%s'</td> <td>'%s'</td> </tr>"%(x[1], x[2], x[3], x[5])
 	return ans
 
-def uploadMovie(mycursor, productionHouseID, name, IMDB, duration, genre):
+def uploadMovie(mydb, productionHouseID, name, IMDB, duration, genre):
 	#upload movie
-
+	mycursor = mydb.cursor()
 	sql_query = ("INSERT INTO Movies (P_HOUSEID, MOVIE_NAME, IMDB, DURATION, GENRE) VALUES (%s, %s, %s, %s, %s)")
 	entry = (productionHouseID, name, IMDB, duration, genre)
 	mycursor.execute(sql_query, entry)
 	#Uncomment when you want to make changes permanent
-	#mydb.commit()
+	mydb.commit()
 
 #Wont work right now due to foreign key constraint in Starcast
 def removeMovie(mycursor, movie):

@@ -63,7 +63,8 @@ def payment(UID):
 
 @app.route("/Rating/<UID>/<MovieID>", methods=['POST'])
 def Rating(UID, MovieID):
-
+	if(not utkarsh.checkPayment(mydb, UID)):
+		return render_template("<h1>Please make payment to watch the movie</h1>")
 	if request.method == "POST":
 		if( "rate" in request.form):
 			rating = request.form["rating"]
@@ -130,8 +131,8 @@ def productionHousePage(PID):
 def artistPage(AID):
 	name1 = Artist.artist_info(mydb, AID)[0]
 	age1 = Artist.artist_info(mydb, AID)[1]
-	#genre = Artist.top_genre(mydb, AID)
-	genre = "Action"
+	genre = Artist.top_genre(mydb, AID)
+	#genre = "Action"
 	uRating = Artist.artist_rating(mydb, AID)
 	imdb1 = Artist.artist_official_rating(mydb, AID)
 	table1 = Artist.get_specific_movie(mydb, AID)

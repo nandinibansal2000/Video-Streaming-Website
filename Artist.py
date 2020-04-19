@@ -41,7 +41,7 @@ def top_genre(mydb, input_Artist_ID):
     elif( len(result) == 1 ) :
         return result[0][0]
     else :
-        return result
+        return result[0][0]
 
 def content(mydb, input_Artist_ID):
     # this would return all the movies, the artist has
@@ -112,3 +112,14 @@ def artist_official_rating(mydb, input_Artist_ID):
 # | Age            | int(2)       | NO   |     | NULL    |       |
 # | Name           | varchar(12)  | NO   |     | NULL    |       |
 # +----------------+--------------+------+-----+---------+-------+
+
+
+if __name__ == "__main__":
+    import mysql.connector
+    mydb = mysql.connector.connect(
+      host="localhost",
+      user="user",
+      passwd="password",
+      database="myDB2"
+    )
+    print(top_genre(mydb, 1))

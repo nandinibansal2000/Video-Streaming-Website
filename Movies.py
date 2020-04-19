@@ -29,7 +29,11 @@ def getBiasedRating(mydb , UID , MovieID) :
     mycursor = mydb.cursor()
     sql = "SELECT COUNT(*) FROM Watch_List GROUP BY UID HAVING UID = '%d' ;"%(UID)
     mycursor.execute(sql)
-    UID_num_movies = mycursor.fetchall()[0][0]  # number of movies watched by User UID
+    r = mycursor.fetchall()  # number of movies watched by User UID
+    if(len(r)==0):
+        UID_num_movies=1
+    else:
+        UID_num_movies = r[0][0]
 
     for person in personList :
         mycursor = mydb.cursor()
@@ -195,10 +199,15 @@ def shell(mydb) :
             print("damn")
 
 
-# if __name__ == '__main__' :
-#     # mydb = mysql.connector.connect(host = "localhost" , user = "usr" , passwd = "pass" , database = "A")
-#     # shell(mydb)
-#     # getSuggestion(mydb,2)
-#     print(getBiasedRating(mydb , 185 , 3))
-#     # 46 , 96
-#     mydb.close()
+if __name__ == "__main__":
+    import mysql.connector
+    mydb = mysql.connector.connect(
+      host="localhost",
+      user="user",
+      passwd="password",
+      database="myDB2"
+    )
+    for i in range(4):
+        for j in range(4):
+            print(getBiasedRating(mydb, i, j), i, j)
+

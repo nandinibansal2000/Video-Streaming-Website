@@ -10,15 +10,14 @@ To be done -
       * Merch for user page
   2. Webpage
 * Webpage
-  * Artist page
-    1. Top_genre query not working
   * User Page
     1. Suggested movies dynamic
-    2. Make payment
   * Movie Page
-    1. Watch movie and take ratings (popup)
+    1. Find better image for movie banner
   * Production House
     2. Upload Movie
 * Indexing and query/database optimisation (Week 6, 7)
+  1. Drop subscription type in user
+  2. Need of UIDs in Family Table (drop them)
 * Update doc and ER Model
 * Algebraic Queries

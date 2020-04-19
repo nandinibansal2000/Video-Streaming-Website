@@ -59,30 +59,36 @@ def searchMovie(mydb, movieName, input_UID):
 		ans += '<a href="/user/'+str(input_UID)+'/movie/'+str(x[0])+'">'+'<button type="button" class="btn btn-light">'+str(x[1])+'</button>'+'</a>'
 	return ans
 
-def getSuggestions(mydb):
-	pass
+
 
 def makePaymentForUser(mydb, input_UID):
-	pass
+	mycursor = mydb.cursor()
+	sql = "UPDATE Users SET IndividualPayment='true' WHERE UID = '%d'"%(input_UID)
+	mycursor.execute(sql)
+	mydb.commit()
 
 def makePaymentForFamily(mydb, input_UID):
-	pass
-
-def func(mydb):
 	mycursor = mydb.cursor()
-	sql = ""
+	sql = "UPDATE Family SET Payment_Status='true' WHERE FamilyID IN (SELECT FamilyID FROM Users WHERE UID='%d')"%(input_UID)
 	mycursor.execute(sql)
+	mydb.commit()
 
-def func(mydb):
+
+def checkPayment(mydb, input_UID):
 	mycursor = mydb.cursor()
-	sql = ""
+	sql = "SELECT IndividualPayment, FamilyID FROM Users WHERE UID='%d'"%(input_UID)
 	mycursor.execute(sql)
-
-
-def main(input_username):
-	pass
-
-
+	myresult =  mycursor.fetchall()
+	if(myresult[0][0]=='true'):
+		return True
+	else:
+		FamilyID1 = myresult[0][1]
+	sql = "SELECT Payment_Status FROM Family WHERE FamilyID='%d'"%(FamilyID1)
+	mycursor.execute(sql)
+	myresult =  mycursor.fetchall()
+	if(myresult[0][0]=='true'):
+		return True	
+	return False
 
 
 
