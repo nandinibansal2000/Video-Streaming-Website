@@ -12,10 +12,9 @@ To be done -
 * Webpage
   * User Page
     1. Suggested movies dynamic
-  * Movie Page
-    1. Find better image for movie banner
   * Production House
-    2. Upload Movie
+    1. Upload Movie
+    2. Production House rank (optional)
 * Indexing and query/database optimisation (Week 6, 7)
   1. Drop subscription type in user
   2. Need of UIDs in Family Table (drop them)
