@@ -90,10 +90,10 @@ def uploadMovie(mydb, productionHouseID, name, IMDB, duration, genre):
 #Wont work right now due to foreign key constraint in Starcast
 def removeMovie(mycursor, movie):
 	#remove movie from name
-
-	sql_query = ("DELETE FROM Movies WHERE MOVIE_NAME = %s")
-	movieName = (movie, )
-	mycursor.execute(sql_query, movieName)
+	pass
+	# sql_query = ("DELETE FROM Movies WHERE MOVIE_NAME = %s")
+	# movieName = (movie, )
+	# mycursor.execute(sql_query, movieName)
 	# mycursor.execute("SELECT * FROM MOVIES")
 	# print(mycursor.fetchall())
 

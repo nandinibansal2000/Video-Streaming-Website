@@ -40,15 +40,18 @@ def Dashboard():
 def register():
     return render_template("register.html")
 
-@app.route("/upload/", methods=['POST'])
-def upload():
-
+@app.route("/upload/<PID>", methods=['POST'])
+def upload(PID):
+	PID = int(PID)
 	if request.method == "POST":
 		if( "upload" in request.form):
-		
-			#Moving forward code
-			print("Moving Forward...")
-	return render_template('main.html')
+			name = request.form["name"]
+			duration = request.form["duration"]
+			genre = request.form["genre"]
+			IMDB = request.form["imdb"]
+			print(PID, name, IMDB, duration, genre)
+			productionHouse.uploadMovie(mydb, PID, name, IMDB, duration, genre)
+	return redirect(url_for('productionHousePage', PID))
 @app.route("/payment/<UID>", methods=['POST'])
 def payment(UID):
 	UID = int(UID)
@@ -125,7 +128,8 @@ def productionHousePage(PID):
 	graph1 = productionHouse.graph1(mycursor, PID)
 	graph2 = productionHouse.graph2(mycursor, PID)
 	gvr = productionHouse.genreVSrating(mycursor, PID)
-	return render_template("productionHouse.html", name=name1, Movies_embed=movies, Upcoming_Movies_embed=upcoming_movies, chart1=graph1, chart2=graph2, genreVSrating=gvr)
+	url = "/upload/"+str(PID)
+	return render_template("productionHouse.html", name=name1, Movies_embed=movies, Upcoming_Movies_embed=upcoming_movies, chart1=graph1, chart2=graph2, genreVSrating=gvr, url_upload=url)
 
 @app.route('/artist/<int:AID>')
 def artistPage(AID):
