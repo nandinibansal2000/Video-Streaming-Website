@@ -13,6 +13,7 @@ import productionHouse
 import pygal
 import Movies
 import Artist
+import merchandise
 
 app = Flask(__name__)
 
@@ -104,7 +105,9 @@ def moviePage(UID, MovieID):
 	phouse1 = Movies.getProductionHouseName(mydb, MovieID)
 	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
 	url1 = "/Rating/"+str(UID)+"/"+str(MovieID)
-	return render_template("movie.html", hours=Hours1, name=name1, genre=genre1, imdb=imdb1, prating=prating1, phouse=phouse1, duration=duration1, artist_embed=artists, url=url1)
+	img_addr1 = url_for('static', filename='images/merch.jpeg')
+	merch_embed1 = merchandise.getMerchandiseFromMovie(mydb, MovieID, img_addr1)
+	return render_template("movie.html", hours=Hours1, name=name1, genre=genre1, imdb=imdb1, prating=prating1, phouse=phouse1, duration=duration1, artist_embed=artists, url=url1, merch_embed=merch_embed1)
 
 @app.route('/movie/<int:MovieID>')
 def movieInfoPage(MovieID):

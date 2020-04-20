@@ -7,25 +7,25 @@ import mysql.connector
 import pygal
 
 
-mydb = mysql.connector.connect(
+# mydb = mysql.connector.connect(
 
-	host="localhost",
-	user="Drigil",
-	passwd="Anshul12",
-	database = "dbmsproject",
-	auth_plugin="mysql_native_password"
+# 	host="localhost",
+# 	user="Drigil",
+# 	passwd="Anshul12",
+# 	database = "dbmsproject",
+# 	auth_plugin="mysql_native_password"
 
-)
+# )
 
-if(mydb.is_connected()):
-	print("Successfully Connected")
+# if(mydb.is_connected()):
+# 	print("Successfully Connected")
 
 
-def getCursor(mydb):
-	#get cursor from database
-	#Call this function first
+# def getCursor(mydb):
+# 	#get cursor from database
+# 	#Call this function first
 
-	return mydb.cursor()
+# 	return mydb.cursor()
 
 def getMovieIDFromMovieName(mycursor, movie):
 	#get movie ID from movie name
@@ -37,14 +37,86 @@ def getMovieIDFromMovieName(mycursor, movie):
 	return result[0]	
 
 
-def getMerchandiseFromMovie(mycursor, movie):
+def getMerchandiseFromMovie(mydb, movie, img_addr):
 	#Get movie merchandise from movie ID
-
+	mycursor = mydb.cursor()
 	movieName = (movie, )
-	sql_query = ("SELECT MERCHID, MERCHNAME FROM MERCHANDISE WHERE MOVIEID = %s")
+	sql_query = ("SELECT MERCHID, MERCHNAME, LINK FROM Merchandise WHERE MOVIEID = %s")
 	mycursor.execute(sql_query, movieName)
 	arr = mycursor.fetchall()
-	return arr
+	if(len(arr)==0):
+		return
+	ans = """<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+		  <ol class="carousel-indicators">
+		    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>"""
+	for i in range(1, len(arr)):
+		ans += """<li data-target="#carouselExampleCaptions" data-slide-to="%d"></li>\n"""%(i)
+	ans += """ </ol>
+		  <div class="carousel-inner">
+		    <div class="carousel-item active">
+		    <a href = "%s">
+		      <img src="%s" class="d-block w-100" alt="Merch"></a>
+		      <div class="carousel-caption d-none d-md-block">
+		        <h5>%s</h5>
+		      </div>
+		    </div>"""%(arr[0][2], img_addr, arr[0][1])
+	for i in range(1, len(arr)):
+		ans += """<div class="carousel-item">
+			 <a href = "%s">
+		      <img src="%s" class="d-block w-100" alt="Merch"></a>
+		      <div class="carousel-caption d-none d-md-block">
+		        <h5>%s</h5>
+		      </div>
+		    </div>"""%(arr[i][2], img_addr, arr[i][1])
+	ans += """</div>
+		  <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+		    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		    <span class="sr-only">Previous</span>
+		  </a>
+		  <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+		    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+		    <span class="sr-only">Next</span>
+		  </a>
+		</div>"""
+	return ans
+
+	"""<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+		  <ol class="carousel-indicators">
+		    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+		    <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+		    <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+		  </ol>
+		  <div class="carousel-inner">
+		    <div class="carousel-item active">
+		      <img src="{{ url_for('static', filename='images/merch.jpeg') }}" class="d-block w-100" alt="...">
+		      <div class="carousel-caption d-none d-md-block">
+		        <h5>Merch Name</h5>
+		      </div>
+		    </div>
+		    <div class="carousel-item">
+		      <img src="{{ url_for('static', filename='images/merch.jpeg') }}" class="d-block w-100" alt="...">
+		      <div class="carousel-caption d-none d-md-block">
+		        <h5>Second slide label</h5>
+		        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		      </div>
+		    </div>
+		    <div class="carousel-item">
+		      <img src="{{ url_for('static', filename='images/merch.jpeg') }}" class="d-block w-100" alt="...">
+		      <div class="carousel-caption d-none d-md-block">
+		        <h5>Third slide label</h5>
+		        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+		      </div>
+		    </div>
+		  </div>
+		  <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+		    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		    <span class="sr-only">Previous</span>
+		  </a>
+		  <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+		    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+		    <span class="sr-only">Next</span>
+		  </a>
+		</div>"""
 
 def getMoviesFromArtist(mycursor, artist):
 	#get movieID from artistID
@@ -135,7 +207,7 @@ def dislikeMerch(mycursor, merch):
 	mycursor.execute(sql_query2, vals)
 
 
-cursor = getCursor(mydb)
+# cursor = getCursor(mydb)
 
 
 
