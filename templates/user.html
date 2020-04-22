@@ -206,8 +206,8 @@
 		</div>
 		
 
-
-		<div class="list-group list-group-horizontal">
+		{{ suggested_embed | safe }}
+		<!-- <div class="list-group list-group-horizontal">
 		  <a href="#" class="list-group-item list-group-item-action">
 		    <div class="card">
 		      <img src="{{ url_for('static', filename='images/poster.jpg') }}" class="card-img-top" alt="...">
@@ -237,7 +237,7 @@
 		      </div>
 		    </a>
 		  </a>
-		</div>
+		</div> -->
 		{{ merch_embed | safe }}
 	</div>
 	<script>

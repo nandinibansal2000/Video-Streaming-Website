@@ -19,6 +19,24 @@ def getSuggestion(mydb , UID) :
                 MovieList[m[0]] = i[1]/( result[0][1] * (len(result)-1) )
     # print(MovieList , list(MovieList.items()))
     return list(MovieList.items())[:3] # return MovieID and Weighted_similarity (diff from biased rating)
+
+def getSuggestionsEmbed(mydb, UID, img_addr):
+    ans = """ """
+    arr = getSuggestion(mydb, UID)
+    for x in arr:
+        ans += """
+              <a href="%s" class="list-group-item list-group-item-action">
+                <div class="card">
+                  <img src="%s" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title">%s</h5>
+                    <p class="card-text">Similarity: %s | IMDB: %d</p>
+                  </div>
+                </div>
+              </a>
+              """%("/user/"+str(UID)+"/movie/"+str(x[0]), img_addr, getMovieName(mydb , x[0]), str(x[1]*100)[:4]+"%", getIMDB_Rating(mydb , x[0]))
+    ans2 = """<div class="list-group list-group-horizontal">"""+ans+"""</div>"""
+    return ans2
 def getBiasedRating(mydb , UID , MovieID) :
     mycursor = mydb.cursor()
     sql = "SELECT W.UID , W.Rating FROM Watch_List W WHERE W.MovieID = '%d' and UID != '%d' ;"%(MovieID , UID)
@@ -103,6 +121,7 @@ def getIMDB_Rating(mydb , MovieID) :
     mycursor.execute(sql)
     result = mycursor.fetchall() ;
     if( len(result) == 0 ) :
+        print("None")
         return None
     elif( len(result) == 1 ) :
         return result[0][0]
@@ -114,6 +133,7 @@ def getDuration(mydb , MovieID) :
     mycursor.execute(sql)
     result = mycursor.fetchall() ;
     if( len(result) == 0 ) :
+        print("None")
         return None
     elif( len(result) == 1 ) :
         return result[0][0]
@@ -209,7 +229,6 @@ if __name__ == "__main__":
       passwd="password",
       database="myDB2"
     )
-    for i in range(4):
-        for j in range(4):
-            print(getBiasedRating(mydb, i, j), i, j)
+    for i in range(1,5):
+        print(getSuggestion(mydb, i))
 
