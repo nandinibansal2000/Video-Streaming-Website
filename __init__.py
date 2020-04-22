@@ -32,14 +32,14 @@ mydb = mysql.connector.connect(
 
 @app.route('/')
 def home():
-    return render_template("main.html")
+	return render_template("main.html")
 
 @app.route('/Dashboard')
 def Dashboard():
-    return render_template("Dashboard.html")
+	return render_template("Dashboard.html")
 @app.route('/register')
 def register():
-    return render_template("register.html")
+	return render_template("register.html")
 
 @app.route("/upload/<PID>", methods=['POST'])
 def upload(PID):
@@ -81,16 +81,19 @@ def userPage(UID):
 	LoginID1 = utkarsh.getLoginID(mydb, UID)[0][0]
 	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
 	url1 = "/payment/"+str(UID)
+	img_addr1 = url_for('static', filename='images/merch.jpeg')
+	arr = merchandise.getMerchandiseFromUser(mydb, UID)
+	merch_embed1 = merchandise.getMerchandiseHTML(arr, img_addr1)
 	if request.method == 'GET':		
-		return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, url=url1)
+		return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, url=url1, merch_embed=merch_embed1)
 	elif request.method == 'POST':
 		try:
 			movie_name = request.form["search_movie"]
 			print(movie_name)
 			search_movie_result = utkarsh.searchMovie(mydb, movie_name, UID)
-			return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, search_movie_result_embed=search_movie_result, url=url1)
+			return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, search_movie_result_embed=search_movie_result, url=url1, merch_embed=merch_embed1)
 		except:
-			return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, url=url1)
+			return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, url=url1, merch_embed=merch_embed1)
 
 
 @app.route('/user/<int:UID>/movie/<int:MovieID>')
@@ -106,7 +109,8 @@ def moviePage(UID, MovieID):
 	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
 	url1 = "/Rating/"+str(UID)+"/"+str(MovieID)
 	img_addr1 = url_for('static', filename='images/merch.jpeg')
-	merch_embed1 = merchandise.getMerchandiseFromMovie(mydb, MovieID, img_addr1)
+	arr = merchandise.getMerchandiseFromMovie(mydb, MovieID)
+	merch_embed1 = merchandise.getMerchandiseHTML(arr, img_addr1)
 	return render_template("movie.html", hours=Hours1, name=name1, genre=genre1, imdb=imdb1, prating=prating1, phouse=phouse1, duration=duration1, artist_embed=artists, url=url1, merch_embed=merch_embed1)
 
 @app.route('/movie/<int:MovieID>')
@@ -132,7 +136,10 @@ def productionHousePage(PID):
 	graph2 = productionHouse.graph2(mycursor, PID)
 	gvr = productionHouse.genreVSrating(mycursor, PID)
 	url = "/upload/"+str(PID)
-	return render_template("productionHouse.html", name=name1, Movies_embed=movies, Upcoming_Movies_embed=upcoming_movies, chart1=graph1, chart2=graph2, genreVSrating=gvr, url_upload=url)
+	img_addr1 = url_for('static', filename='images/merch.jpeg')
+	arr = merchandise.getMerchandiseFromProductionHouse(mydb, PID)
+	merch_embed1 = merchandise.getMerchandiseHTML(arr, img_addr1)
+	return render_template("productionHouse.html", name=name1, Movies_embed=movies, Upcoming_Movies_embed=upcoming_movies, chart1=graph1, chart2=graph2, genreVSrating=gvr, url_upload=url, merch_embed=merch_embed1)
 
 @app.route('/artist/<int:AID>')
 def artistPage(AID):
@@ -143,7 +150,10 @@ def artistPage(AID):
 	uRating = Artist.artist_rating(mydb, AID)
 	imdb1 = Artist.artist_official_rating(mydb, AID)
 	table1 = Artist.get_specific_movie(mydb, AID)
-	return render_template("artists.html", name=name1, age=age1, top_genre=genre, user_rating=uRating, imdb=imdb1, table=table1)
+	img_addr1 = url_for('static', filename='images/merch.jpeg')
+	arr = merchandise.getMerchandiseFromArtist(mydb, AID)
+	merch_embed1 = merchandise.getMerchandiseHTML(arr, img_addr1)
+	return render_template("artists.html", name=name1, age=age1, top_genre=genre, user_rating=uRating, imdb=imdb1, table=table1, merch_embed=merch_embed1)
 
 def user_signup(c,conn,username,password,designation,age):
 	c.execute("SELECT MAX(UID) FROM Users ")+1
@@ -196,7 +206,7 @@ def get_data():
 				c, conn = connection()
 				# print("erjkh")
 				x = c.execute("SELECT * FROM Passwords WHERE LoginID = '%s'"%
-				          (username))
+						  (username))
 				# print("erkljkgt")
 				# print(x)
 				if int(x) > 0:
@@ -207,7 +217,7 @@ def get_data():
 				else:
 					print("pppp")
 					c.execute("INSERT INTO Passwords VALUES (%s, %s,%s)",
-					          (thwart(username),thwart(password),thwart(designation)))
+							  (thwart(username),thwart(password),thwart(designation)))
 				
 					# print("llll")
 					
@@ -231,7 +241,7 @@ def get_data():
 				c, conn = connection()
 				# print("erjkh")
 				x = c.execute("SELECT * FROM Passwords WHERE LoginID = '%s' AND passwd='%s'"%
-				          (username,password))
+						  (username,password))
 				print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"+str(x))
 				print(x)
 				if(int(x)==1):

@@ -37,104 +37,107 @@ def getMovieIDFromMovieName(mycursor, movie):
 	return result[0]	
 
 
-def getMerchandiseFromMovie(mydb, movie, img_addr):
+def getMerchandiseFromMovie(mydb, movie):
 	#Get movie merchandise from movie ID
 	mycursor = mydb.cursor()
 	movieName = (movie, )
 	sql_query = ("SELECT MERCHID, MERCHNAME, LINK FROM Merchandise WHERE MOVIEID = %s")
 	mycursor.execute(sql_query, movieName)
 	arr = mycursor.fetchall()
+	return arr
+
+def getMerchandiseHTML(arr, img_addr):
 	if(len(arr)==0):
 		return
 	ans = """<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
 		  <ol class="carousel-indicators">
-		    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>"""
+			<li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>"""
 	for i in range(1, len(arr)):
 		ans += """<li data-target="#carouselExampleCaptions" data-slide-to="%d"></li>\n"""%(i)
 	ans += """ </ol>
 		  <div class="carousel-inner">
-		    <div class="carousel-item active">
-		    <a href = "%s">
-		      <img src="%s" class="d-block w-100" alt="Merch"></a>
-		      <div class="carousel-caption d-none d-md-block">
-		        <h5>%s</h5>
-		      </div>
-		    </div>"""%(arr[0][2], img_addr, arr[0][1])
+			<div class="carousel-item active">
+			<a href = "%s">
+			  <img src="%s" class="d-block w-100" alt="Merch"></a>
+			  <div class="carousel-caption d-none d-md-block">
+				<h5>%s</h5>
+			  </div>
+			</div>"""%(arr[0][2], img_addr, arr[0][1])
 	for i in range(1, len(arr)):
 		ans += """<div class="carousel-item">
 			 <a href = "%s">
-		      <img src="%s" class="d-block w-100" alt="Merch"></a>
-		      <div class="carousel-caption d-none d-md-block">
-		        <h5>%s</h5>
-		      </div>
-		    </div>"""%(arr[i][2], img_addr, arr[i][1])
+			  <img src="%s" class="d-block w-100" alt="Merch"></a>
+			  <div class="carousel-caption d-none d-md-block">
+				<h5>%s</h5>
+			  </div>
+			</div>"""%(arr[i][2], img_addr, arr[i][1])
 	ans += """</div>
 		  <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
-		    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-		    <span class="sr-only">Previous</span>
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="sr-only">Previous</span>
 		  </a>
 		  <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
-		    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-		    <span class="sr-only">Next</span>
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="sr-only">Next</span>
 		  </a>
 		</div>"""
 	return ans
 
 	"""<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
 		  <ol class="carousel-indicators">
-		    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
-		    <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
-		    <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+			<li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+			<li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+			<li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
 		  </ol>
 		  <div class="carousel-inner">
-		    <div class="carousel-item active">
-		      <img src="{{ url_for('static', filename='images/merch.jpeg') }}" class="d-block w-100" alt="...">
-		      <div class="carousel-caption d-none d-md-block">
-		        <h5>Merch Name</h5>
-		      </div>
-		    </div>
-		    <div class="carousel-item">
-		      <img src="{{ url_for('static', filename='images/merch.jpeg') }}" class="d-block w-100" alt="...">
-		      <div class="carousel-caption d-none d-md-block">
-		        <h5>Second slide label</h5>
-		        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-		      </div>
-		    </div>
-		    <div class="carousel-item">
-		      <img src="{{ url_for('static', filename='images/merch.jpeg') }}" class="d-block w-100" alt="...">
-		      <div class="carousel-caption d-none d-md-block">
-		        <h5>Third slide label</h5>
-		        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-		      </div>
-		    </div>
+			<div class="carousel-item active">
+			  <img src="{{ url_for('static', filename='images/merch.jpeg') }}" class="d-block w-100" alt="...">
+			  <div class="carousel-caption d-none d-md-block">
+				<h5>Merch Name</h5>
+			  </div>
+			</div>
+			<div class="carousel-item">
+			  <img src="{{ url_for('static', filename='images/merch.jpeg') }}" class="d-block w-100" alt="...">
+			  <div class="carousel-caption d-none d-md-block">
+				<h5>Second slide label</h5>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+			  </div>
+			</div>
+			<div class="carousel-item">
+			  <img src="{{ url_for('static', filename='images/merch.jpeg') }}" class="d-block w-100" alt="...">
+			  <div class="carousel-caption d-none d-md-block">
+				<h5>Third slide label</h5>
+				<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+			  </div>
+			</div>
 		  </div>
 		  <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
-		    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-		    <span class="sr-only">Previous</span>
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="sr-only">Previous</span>
 		  </a>
 		  <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
-		    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-		    <span class="sr-only">Next</span>
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="sr-only">Next</span>
 		  </a>
 		</div>"""
 
-def getMoviesFromArtist(mycursor, artist):
+def getMoviesFromArtist(mydb, artist):
 	#get movieID from artistID
-
+	mycursor = mydb.cursor()
 	artistID = (artist, )
-	sql_query = ("SELECT MOVIEID FROM STARCAST WHERE ARTISTID = %s")
+	sql_query = ("SELECT MOVIEID FROM Starcast WHERE ARTISTID = %s")
 	mycursor.execute(sql_query, artistID)
 	arr = mycursor.fetchall()
 	return arr
 
 
-def getMerchandiseFromArtist(mycursor, artist):
+def getMerchandiseFromArtist(mydb, artist):
 	#get merchandise from artist ID
-
-	arr = getMoviesFromArtist(mycursor, artist)
+	mycursor = mydb.cursor()
+	arr = getMoviesFromArtist(mydb, artist)
 	merch_arr = []
 	for i in arr:
-		merch_arr.extend(getMerchandiseFromMovie(mycursor, i[0]))
+		merch_arr.extend(getMerchandiseFromMovie(mydb, i[0]))
 	return merch_arr
 
 
@@ -142,18 +145,18 @@ def getMoviesFromProductionHouse(mycursor, productionHouse):
 	#Get movies corresponding to production house ID
 
 	productionHouseName = (productionHouse, )
-	sql_query = ("SELECT MOVIE_ID, GENRE FROM MOVIES WHERE P_HouseID = %s")
+	sql_query = ("SELECT MOVIE_ID, GENRE FROM Movies WHERE P_HouseID = %s")
 	mycursor.execute(sql_query, productionHouseName)
 	arr = mycursor.fetchall()
 	return arr
 
-def getMerchandiseFromProductionHouse(mycursor, productionHouse):
+def getMerchandiseFromProductionHouse(mydb, productionHouse):
 	#get merchandise from production house
-
+	mycursor = mydb.cursor()
 	arr = getMoviesFromProductionHouse(mycursor, productionHouse)
 	merch_arr = []
 	for i in arr:
-		merch_arr.extend(getMerchandiseFromMovie(mycursor, i[0]))
+		merch_arr.extend(getMerchandiseFromMovie(mydb, i[0]))
 	return merch_arr
 
 
@@ -161,19 +164,19 @@ def getMoviesFromUser(mycursor, user):
 	#Get the list of movies watced by userID
 
 	userID = (user, )
-	sql_query = ("SELECT MOVIEID FROM WATCH_LIST WHERE UID = %s")
+	sql_query = ("SELECT MOVIEID FROM Watch_List WHERE UID = %s")
 	mycursor.execute(sql_query, userID)		
 	arr = mycursor.fetchall()
 	return arr
 
 
-def getMerchandiseFromUser(mycursor, user):
+def getMerchandiseFromUser(mydb, user):
 	#get merchandise from user
-
+	mycursor = mydb.cursor()
 	arr = getMoviesFromUser(mycursor, user)
 	merch_arr = []
 	for i in arr:
-		merch_arr.extend(getMerchandiseFromMovie(mycursor, i[0]))
+		merch_arr.extend(getMerchandiseFromMovie(mydb, i[0]))
 	return merch_arr
 
 def likeMerch(mycursor, merch):
@@ -216,3 +219,15 @@ def dislikeMerch(mycursor, merch):
 #print(getMoviesFromArtist(cursor, 1))
 #arr = getMerchandiseFromUser(cursor, 5)
 
+if __name__ == '__main__':
+	import mysql.connector
+	mydb = mysql.connector.connect(
+	  host="localhost",
+	  user="user",
+	  passwd="password",
+	  database="newdb"
+	)
+	# img_addr1 = url_for('static', filename='images/merch.jpeg')
+	arr = getMerchandiseFromArtist(mydb, 5)
+	print("arr", arr[0])
+	getMerchandiseHTML(arr, "")
