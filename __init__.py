@@ -3,7 +3,7 @@
 import MySQLdb
 from wtforms import Form, BooleanField , TextField, PasswordField, validators
 from flask import Flask,render_template,flash,request,url_for,redirect,session
-from dbconnect import connection
+
 from passlib.hash import sha256_crypt
 from MySQLdb import escape_string as thwart
 import gc
@@ -249,8 +249,9 @@ def get_data():
 				# email = form.email.data
 				#	password = sha256_crypt.encrypt((str(request.form["psw"])))
 				# print("lol")
+				# password = sha256_crypt.encrypt((str(request.form["psw"])))
 				password = request.form["psw"]
-				# password = request.form["psw"]
+				print(password,"xxxxxxxxxxxxxxxxxxxx")
 				designation= request.form["designation"]
 				age  = request.form["age"]
 				fam = request.form["fam"]
@@ -299,12 +300,15 @@ def get_data():
 						uid1 = productionHouse.PhID(mydb, username)
 						return redirect(url_for('productionHousePage', PID=uid1))
 			else:
+				print("zzzzzzzzzzzzzzzz")
 				username  = request.form["name"]
 				# email = form.email.data
 				#	password = sha256_crypt.encrypt((str(request.form["psw"])))
-				# print("lol")
-				password = sha256_crypt.encrypt((str(request.form["psw"])))
-				# password = request.form["pass"]
+				print("lol")
+				# password = sha256_crypt.encrypt((str(request.form["pass"])))
+				# print(password,"yyyyyyyyyyyyyy")
+
+				password = request.form["pass"]
 				# password = sha256_crypt.encrypt(password)
 				# print("poi")
 				# print(username,password)
@@ -312,24 +316,26 @@ def get_data():
 				mycursor = mydb.cursor()
 				sql = "SELECT Designation FROM Passwords WHERE LoginID = '%s' AND passwd='%s'"% (username,password)
 				mycursor.execute(sql)
+
 				x=mycursor.fetchall()
 				
 				print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"+str(x))
-				print(x)
-				if(x=="User"):
-					uid1 = utkarsh.getUID(mydb, username)
-					return redirect(url_for('userPage', UID=uid1))
-				elif(x=="Artist"):
-					uid1 = ARTISTID(mydb, username)
-					print(uid1)
-					return redirect(url_for('artistPage', AID=uid1))
-				elif(x=="Production"):
-					uid1 = productionHouse.PhID(mydb, username)
-					return redirect(url_for('productionHousePage', PID=uid1))
-				else:
-					# print("oooof")
-					flash("Wrong Credentials")
-					return render_template("main.html")
+				if(len(x)>0):
+					x=x[0][0]
+					if(x=="User"):
+						uid1 = utkarsh.getUID(mydb, username)
+						return redirect(url_for('userPage', UID=uid1))
+					elif(x=="Artist"):
+						uid1 = ARTISTID(mydb, username)
+						print(uid1)
+						return redirect(url_for('artistPage', AID=uid1))
+					elif(x=="Production"):
+						uid1 = productionHouse.PhID(mydb, username)
+						return redirect(url_for('productionHousePage', PID=uid1))
+					else:
+						# print("oooof")
+						flash("Wrong Credentials")
+						return render_template("main.html")
 
 
 		return render_template("main.html")
@@ -349,7 +355,7 @@ if __name__ == '__main__':
 	mydb = mysql.connector.connect(
 	host="localhost",
 	user="new",
-	passwd="password",
+	passwd="jatin1995@2000",
 	database="mydb"
 	)
 	app.secret_key = 'SECRET KEY'
