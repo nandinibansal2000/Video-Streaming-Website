@@ -19,7 +19,11 @@ import pygal
 
 # if(mydb.is_connected()):
 # 	print("Successfully Connected")
-
+def PhID(mydb, input_LogonID):
+	mycursor = mydb.cursor()
+	sql = "SELECT PHID FROM Production_Houses WHERE LoginID='%s'"%(input_LogonID)
+	mycursor.execute(sql)
+	return  mycursor.fetchall()[0][0]
 
 def getCursor(mydb):
 	#get cursor from database
