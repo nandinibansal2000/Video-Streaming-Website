@@ -1,362 +1,594 @@
-# import pymysql
-# pymysql.install_as_MySQLdb()
-import MySQLdb
-from wtforms import Form, BooleanField , TextField, PasswordField, validators
-from flask import Flask,render_template,flash,request,url_for,redirect,session
+<!DOCTYPE html>
+<html lang="en">
 
-from passlib.hash import sha256_crypt
-from MySQLdb import escape_string as thwart
-import gc
-import utkarsh
-import mysql.connector
-import productionHouse
-import pygal
-import Movies
-import Artist
-import merchandise
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-app = Flask(__name__)
+  <!-- <title>TheEvent Bootstrap Template - Index</title> -->
+  <meta content="" name="descriptison">
+  <meta content="" name="keywords">
 
-# mydb = mysql.connector.connect(
-# 	  host="localhost",
-# 	  user="user",
-# 	  passwd="passwd",
-# 	  database="mydb"
-# 	)
-
-@app.route('/')
-def home():
-	return render_template("main.html")
-
-@app.route('/Dashboard')
-def Dashboard():
-	return render_template("Dashboard.html")
-@app.route('/register')
-def register():
-	return render_template("register.html")
-
-@app.route("/upload/<PID>", methods=['POST'])
-def upload(PID):
-	PID = int(PID)
-	if request.method == "POST":
-		if( "upload" in request.form):
-			name = request.form["name"]
-			duration = request.form["duration"]
-			genre = request.form["genre"]
-			IMDB = request.form["imdb"]
-			print(PID, name, IMDB, duration, genre)
-			productionHouse.uploadMovie(mydb, PID, name, IMDB, duration, genre)
-	return redirect(url_for('productionHousePage', PID=PID))
-@app.route("/payment/<UID>", methods=['POST'])
-def payment(UID):
-	UID = int(UID)
-	if request.method == "POST":
-		if( "user" in request.form):
-			utkarsh.makePaymentForUser(mydb, UID)
-		if( "family" in request.form):
-			utkarsh.makePaymentForUser(mydb, UID)
-		#Moving forward code
-	print("Moving Forward...")
-	return redirect(url_for('userPage', UID=UID))
-
-@app.route("/Rating/<UID>/<MovieID>", methods=['POST'])
-def Rating(UID, MovieID):
-	if(not utkarsh.checkPayment(mydb, UID)):
-		return render_template("<h1>Please make payment to watch the movie</h1>")
-	if request.method == "POST":
-		if( "rate" in request.form):
-			rating = request.form["rating"]
-			utkarsh.watchNewMovie(mydb, int(UID), int(MovieID), int(rating))
-	return redirect(url_for('userPage', UID=int(UID)))
-
-@app.route('/user/<int:UID>', methods=['GET', 'POST'])
-def userPage(UID):
-	name1 = utkarsh.getName(mydb, UID)[0][0]
-	LoginID1 = utkarsh.getLoginID(mydb, UID)[0][0]
-	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
-	url1 = "/payment/"+str(UID)
-	img_addr1 = url_for('static', filename='images/merch.jpeg')
-	arr = merchandise.getMerchandiseFromUser(mydb, UID)
-	merch_embed1 = merchandise.getMerchandiseHTML(arr, img_addr1)
-	img_addr = url_for('static', filename='images/poster.jpg')
-	suggested = Movies.getSuggestionsEmbed(mydb, UID, img_addr)
-	if request.method == 'GET':		
-		return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, url=url1, merch_embed=merch_embed1, suggested_embed=suggested)
-	elif request.method == 'POST':
-		try:
-			movie_name = request.form["search_movie"]
-			print(movie_name)
-			search_movie_result = utkarsh.searchMovie(mydb, movie_name, UID)
-			return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, search_movie_result_embed=search_movie_result, url=url1, merch_embed=merch_embed1, suggested_embed=suggested)
-		except:
-			return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, url=url1, merch_embed=merch_embed1, suggested_embed=suggested)
+  <!-- Favicons -->
+ 
+   <link href="{{url_for('static', filename='/assets/img/favicon.png')}}" rel="icon">
+      <link href="{{url_for('static', filename='/assets/img/favicon.png')}}" rel="icon">
 
 
-@app.route('/user/<int:UID>/movie/<int:MovieID>')
-def moviePage(UID, MovieID):
-	name1 = Movies.getMovieName(mydb, MovieID)
-	genre1 = Movies.getGenre(mydb, MovieID)
-	imdb1 = Movies.getIMDB_Rating(mydb, MovieID)
-	prating1 = Movies.getBiasedRating(mydb, UID, MovieID)
-	duration1 = Movies.getDuration(mydb, MovieID)
-	img_addr = url_for('static', filename='images/actor.jpg')
-	artists = Movies.getArtists(mydb, MovieID, img_addr)
-	phouse1 = Movies.getProductionHouseName(mydb, MovieID)
-	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
-	url1 = "/Rating/"+str(UID)+"/"+str(MovieID)
-	img_addr1 = url_for('static', filename='images/merch.jpeg')
-	arr = merchandise.getMerchandiseFromMovie(mydb, MovieID)
-	merch_embed1 = merchandise.getMerchandiseHTML(arr, img_addr1)
-	return render_template("movie.html", hours=Hours1, name=name1, genre=genre1, imdb=imdb1, prating=prating1, phouse=phouse1, duration=duration1, artist_embed=artists, url=url1, merch_embed=merch_embed1)
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800" rel="stylesheet">
 
-@app.route('/movie/<int:MovieID>')
-def movieInfoPage(MovieID):
-	name1 = Movies.getMovieName(mydb, MovieID)
-	genre1 = Movies.getGenre(mydb, MovieID)
-	imdb1 = Movies.getIMDB_Rating(mydb, MovieID)
-	duration1 = Movies.getDuration(mydb, MovieID)
-	img_addr = url_for('static', filename='images/actor.jpg')
-	artists = Movies.getArtists(mydb, MovieID, img_addr)
-	phouse1 = Movies.getProductionHouseName(mydb, MovieID)
+  <!-- Vendor CSS Files -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="{{url_for('static', filename='/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename='/assets/vendor/animate.css/animate.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename='/assets/vendor/venobox/venobox.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename='/assets/vendor/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename='/assets/vendor/owl.carousel/assets/owl.carousel.min.css')}}" rel="stylesheet">
 
-	return render_template("movie_info.html", name=name1, genre=genre1, imdb=imdb1, phouse=phouse1, duration=duration1, artist_embed=artists)
+  <!-- Template Main CSS File -->
+  <link href="{{url_for('static', filename='/assets/css/style.css')}}" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: TheEvent - v2.0.0
+  * Template URL: https://bootstrapmade.com/theevent-conference-event-bootstrap-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+  <style>
+    #loginPopup input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+#loginPopup button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+#loginPopup button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+#loginPopup .cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+/* Center the image and position the close button */
+#loginPopup .imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+#loginPopup img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+#loginPopup .container {
+  padding: 16px;
+}
+
+#loginPopup span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* The Modal (background) */
+ .modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+#loginPopup .modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 40%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+#loginPopup .close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+#loginPopup .close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+#loginPopup .animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+#loginPopup @-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+#loginPopup @keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+#loginPopup @media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+
+/*================================*/
+/* Set a style for all buttons */
+   #loginPopup1 input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+#loginPopup1 button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+#loginPopup1 button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+#loginPopup1 .cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+/* Center the image and position the close button */
+#loginPopup1 .imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+#loginPopup1 img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+#loginPopup1 .container {
+  padding: 16px;
+}
+
+#loginPopup1 span.psw {
+  float: right;
+  padding-top: 16px;
+}
+.modal1 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+#loginPopup1 .modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 40%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+#loginPopup1 .close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+#loginPopup1 .close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+#loginPopup1 .animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+#loginPopup1 @-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+#loginPopup1 @keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+#loginPopup1 @media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
 
 
-@app.route('/pHouse/<int:PID>')
-def productionHousePage(PID):
-	mycursor = mydb.cursor()
-	name1 = productionHouse.getName(mycursor, PID)
-	movies = productionHouse.getMovies(mycursor, name1)
-	upcoming_movies = productionHouse.getUpcomingMovies(mycursor, PID)
-	graph1 = productionHouse.graph1(mycursor, PID)
-	graph2 = productionHouse.graph2(mycursor, PID)
-	gvr = productionHouse.genreVSrating(mycursor, PID)
-	url = "/upload/"+str(PID)
-	img_addr1 = url_for('static', filename='images/merch.jpeg')
-	arr = merchandise.getMerchandiseFromProductionHouse(mydb, PID)
-	merch_embed1 = merchandise.getMerchandiseHTML(arr, img_addr1)
-	return render_template("productionHouse.html", name=name1, Movies_embed=movies, Upcoming_Movies_embed=upcoming_movies, chart1=graph1, chart2=graph2, genreVSrating=gvr, url_upload=url, merch_embed=merch_embed1)
+    
+  </style>
+</head>
 
-@app.route('/artist/<int:AID>')
-def artistPage(AID):
-	name1 = Artist.artist_info(mydb, AID)[0]
-	age1 = Artist.artist_info(mydb, AID)[1]
-	genre = Artist.top_genre(mydb, AID)
-	#genre = "Action"
-	uRating = Artist.artist_rating(mydb, AID)
-	imdb1 = Artist.artist_official_rating(mydb, AID)
-	table1 = Artist.get_specific_movie(mydb, AID)
-	img_addr1 = url_for('static', filename='images/merch.jpeg')
-	arr = merchandise.getMerchandiseFromArtist(mydb, AID)
-	merch_embed1 = merchandise.getMerchandiseHTML(arr, img_addr1)
-	return render_template("artists.html", name=name1, age=age1, top_genre=genre, user_rating=uRating, imdb=imdb1, table=table1, merch_embed=merch_embed1)
+<body>
+  <!-- LoginPop form -->
 
-def user_signup(username,age,fam):
-	print("fjnckf")
-	mycursor = mydb.cursor()
-	sql = "SELECT MAX(UID) FROM Users "
-	mycursor.execute(sql)
-	c=mycursor.fetchall()
-	print(fam)
-	if(str(fam)=="NO"):
-		sql = "SELECT MAX(FamilyID) FROM Family "
-		mycursor.execute(sql)
-		f=mycursor.fetchall()
+  <div id="loginPopup" class="modal">
+  
+  <form method="POST" class="modal-content animate" action="" >
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('loginPopup').style.display='none'" class="close" title="Close Modal">&times;</span>
+      <img src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png" alt="Avatar" class="avatar">
+    </div>
 
-		print(f,"fffffffffffff")
-		fam = int(f[0][0])+1
-		sql="insert into Family values('%s','%s')"%(fam,"false")
-		mycursor.execute(sql)
+    <div class="container">
+      <label for="uname"><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="uname" required>
 
-
-	# print(c)
-	# c.execute("SELECT MAX(UID) FROM Users ")+1
-	# m= c.fetchone() 
-	ID=int(c[0][0])+1
-	print(ID,"wfjcklwcd")
-	print("fnvjfdv")
-	print(fam)
-	sql = "insert into Users values('%s','%s','%s','%s','%s','%s','%s','%s')"%(ID,username,fam,username,age,'0',0,"none")
-	# sql="INSERT INTO Users(UID,LoginID,Name,Age,IndividualPayment,AvgTime,SubscriptionType) VALUES(%s,%s,%s,%s,%s,%s,%s)",(ID,username,username,age,'0',0,"none")
-	mycursor.execute(sql)
-	
-
-	session['logged_in'] = True
-	session['username'] = username
-
-def artist_signup(username,age):
-	mycursor = mydb.cursor()
-	sql = "SELECT MAX(ArtistID) FROM Artists "
-	mycursor.execute(sql)
-	c=mycursor.fetchall()
-	# c.execute("SELECT MAX(UID) FROM Users ")+1
-	# m= c.fetchone() 
-	ID=int(c[0][0])+1
-	print(ID)
-	sql = "insert into Artists values('%s','%s','%s')"%(ID,username,age)
-
-	# sql="INSERT INTO Artists(ArtistID,Name,Age) VALUES(%s,%s,%s)",(ID,username,age)
-	mycursor.execute(sql)
-	print("lllalallalala")
-
-	
-
-	session['logged_in'] = True
-	session['username'] = username
-
-def production_signup(username):
-	mycursor = mydb.cursor()
-	sql = "SELECT MAX(PHID) FROM Production_Houses "
-	mycursor.execute(sql)
-	c=mycursor.fetchall()
-	ID=int(c[0][0])+1
-	print(ID)
-	sql = "insert into Production_Houses values('%s','%s','%s','%s')"%(ID,username,"0",username)
-	# sql="INSERT INTO Production_Houses(PHID,LoginID,Overall_Rating,Name) VALUES(%s,%s,%s)",(ID,username,0,username)
-	print(sql)
-	mycursor.execute(sql)
-	
-
-	session['logged_in'] = True
-	session['username'] = username
-
-# @app.route('/login/', methods = ['GET','POST'])
-# def login_page():
-#     return render_template("login.html")
-
-# class RegisterationForm(Form):
-# 	username = TextField('Username', [validators.Length(min=4, max=20)])
-# 	# email = TextField('Email Address', [validators.Length(min=6, max=50)])
-# 	password = PasswordField('New Password', [validators.Required(),validators.EqualTo('confirm', message='Passwords must match')])
-# 	confirm = PasswordField('Repeat Password')
-# 	# accept_tos = BooleanField('I accept the Terms of Service and Privacy Notice (updated Jan 22, 2015)', [validators.Required()])
-def ARTISTID(mydb, input_LogonID):
-    mycursor = mydb.cursor()
-    sql = "SELECT ArtistID FROM Artists WHERE Name='%s'"%(input_LogonID)
-    mycursor.execute(sql)
-    print(mycursor.fetchall()[0][0],"kkkk")
-    return 301
-
-@app.route('/', methods = ['GET','POST']) 
-def get_data():
-	try:
-		# form = RegisterationForm(request.form)
-		print("aaaaa")
-		if request.method == "POST":
-			if( "signup" in request.form):
-				print("kkkkkkkllllllllll")
-				username  = request.form["uname"]
-				# email = form.email.data
-				#	password = sha256_crypt.encrypt((str(request.form["psw"])))
-				# print("lol")
-				# password = sha256_crypt.encrypt((str(request.form["psw"])))
-				password = request.form["psw"]
-				print(password,"xxxxxxxxxxxxxxxxxxxx")
-				designation= request.form["designation"]
-				age  = request.form["age"]
-				fam = request.form["fam"]
-	
-				# print("kljh")
-				# print(username)
-				# print(type(username))
-				print("cccccccccccccccc")
-				mycursor = mydb.cursor()
-				sql = "SELECT * FROM Passwords WHERE LoginID = '%s'"%(username)
-				mycursor.execute(sql)
-				x=mycursor.fetchall()
-				
-				if len(x) > 0:
-
-					flash("That username is already taken, please choose another")
-					return render_template('main.html')
-
-				else:
-					print("pppp")
-					# sql ="INSERT INTO Passwords VALUES (%s, %s,%s)",(username,password,designation)
-					sql = "insert into Passwords values('%s', '%s', '%s')"%(username,password,designation)
-					print(sql,"skcldsc")
-					mycursor.execute(sql)
-				
-				
-					print("llll")
-					
-					flash("Thanks for registering!")
-					
-					if(designation=="User"):
-
-						user_signup(username,age,fam)
-						uid1 = utkarsh.getUID(mydb, username)
-						return redirect(url_for('userPage', UID=uid1))
-					elif(designation=="Artist"):
-
-						artist_signup(username,age)
-						uid1 = ARTISTID(mydb, username)
-						print(uid1)
-						return redirect(url_for('artistPage', AID=uid1))
-
-					elif(designation=="Production"):
-
-						production_signup(username)
-						uid1 = productionHouse.PhID(mydb, username)
-						return redirect(url_for('productionHousePage', PID=uid1))
-			else:
-				print("zzzzzzzzzzzzzzzz")
-				username  = request.form["name"]
-				# email = form.email.data
-				#	password = sha256_crypt.encrypt((str(request.form["psw"])))
-				print("lol")
-				# password = sha256_crypt.encrypt((str(request.form["pass"])))
-				# print(password,"yyyyyyyyyyyyyy")
-
-				password = request.form["pass"]
-				# password = sha256_crypt.encrypt(password)
-				# print("poi")
-				# print(username,password)
-				print("yayy")
-				mycursor = mydb.cursor()
-				sql = "SELECT Designation FROM Passwords WHERE LoginID = '%s' AND passwd='%s'"% (username,password)
-				mycursor.execute(sql)
-
-				x=mycursor.fetchall()
-				
-				print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"+str(x))
-				if(len(x)>0):
-					x=x[0][0]
-					if(x=="User"):
-						uid1 = utkarsh.getUID(mydb, username)
-						return redirect(url_for('userPage', UID=uid1))
-					elif(x=="Artist"):
-						uid1 = ARTISTID(mydb, username)
-						print(uid1)
-						return redirect(url_for('artistPage', AID=uid1))
-					elif(x=="Production"):
-						uid1 = productionHouse.PhID(mydb, username)
-						return redirect(url_for('productionHousePage', PID=uid1))
-					else:
-						# print("oooof")
-						flash("Wrong Credentials")
-						return render_template("main.html")
-
-
-		return render_template("main.html")
-	except Exception as e:
-		return (str(e))
+      <label for="age"><b>Age / Since </b></label>
+      <input type="text" placeholder="Enter Age" name="age" required>
 
 
 
-if __name__ == '__main__':
-	# app.secret_key = 'super secret key'
-	# app.config['SESSION_TYPE'] = 'filesystem'
+      <label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psw" required>
 
-	# session.init_app(app)
+      <label for="fam"><b>Want to be added to an existing Family?</b></label>
+      <input type="text" placeholder="Enter the FamilyID or Enter NO" name="fam" required>
+
+      <label for="designation"><b>Sign up As</b></label>
+      <input type="text" placeholder="e.g User/Artist/Production" name="designation" required>
+         
+     
+
+      <button type="submit" name="signup" value="Send" onclick="closeForm()">Login
+      </button>
+        </div>
+
+      
+    </form>
+  </div>
+  <!-- loginpop1 -->
+   <div id="loginPopup1" class="modal1">
+  
+  <form method="POST" class="modal-content animate" action="" >
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('loginPopup1').style.display='none'" class="close" title="Close Modal">&times;</span>
+      <img src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png" alt="Avatar" class="avatar">
+    </div>
+
+    <div class="container">
+      <label for="name"><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="name" required>
+
+      <label for="pass"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="pass" required>
+
+      
+         
+     
+
+      <button type="submit"  value="Send" onclick="closeForm1()">Login
+      </button>
+        </div>
+
+      
+    </form>
+  </div>
+
+  <!-- ======= Header ======= -->
+  <header id="header">
+    <div class="container">
+
+      <div id="logo" class="pull-left">
+        <!-- Uncomment below if you prefer to use a text logo -->
+        <!-- <h1><a href="#intro">The<span>Event</span></a></h1>-->
+        <a href="index.html" class="scrollto"><img src="{{url_for('static', filename='/images/logo.png')}}" height ="200" width ="70" alt="" title=""><b>ESCAPE THE WHITE CHAR*</b></a>
+      </div>
+
+      <nav id="nav-menu-container">
+        <ul class="nav-menu">
+          <li class="menu-active"><a href="main.html">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li> <a href="javascript:openForm()">Signup</a></li>
+          <li> <a href="javascript:openForm1()">Login</a></li>
+          
+        </ul>
+      </nav><!-- #nav-menu-container -->
+    </div>
+  </header><!-- End Header -->
 
 
-	import mysql.connector
-	mydb = mysql.connector.connect(
-	host="localhost",
-	user="new",
-	passwd="jatin1995@2000",
-	database="mydb"
-	)
-	app.secret_key = 'SECRET KEY'
-	app.run(debug=True) 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  cycleBackgrounds(2000);
+});
+function openForm() {
+  document.getElementById("loginPopup").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("loginPopup").style.display = "none";
+}
+function openForm1() {
+  document.getElementById("loginPopup1").style.display = "block";
+}
+
+function closeForm1() {
+  document.getElementById("loginPopup1").style.display = "none";
+}
+</script>
+
+
+  <!-- ======= Intro Section ======= -->
+  <section id="intro">
+    <div class="intro-container wow fadeIn">
+      <h1 class="mb-4 pb-0">WATCH YOUR<br><span>FAVOURITE</span> MOVIES HERE!</h1>
+   
+      <a href="" class="venobox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>
+      <a href="#about" class="about-btn scrollto">About Us</a>
+    </div>
+  </section><!-- End Intro Section -->
+
+  <main id="main">
+
+    <!-- ======= About Section ======= -->
+    <section id="about">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <h2>About Us</h2>
+            <p>We have tried to build a platform where you can watch the latest movies. You will be suggested movies according to the recommendations of users of the same taste.
+            Not only this here you can buy the attires of your favourite Actors.</p>
+          </div>
+          <div class="col-lg-3">
+            <br>
+            <h3>Signup  today  to  enjoy  your  favourite movies!!</h3>
+            <p></p>
+          </div>
+
+        </div>
+      </div>
+    </section><!-- End About Section -->
+
+    <!-- ======= Speakers Section ======= -->
+    <section id="speakers" class="wow fadeInUp">
+      <div class="container">
+        <div class="section-header">
+          <h2>OUR TEAM</h2>
+          <!-- <p>Here are some of our speakers</p> -->
+        </div>
+
+        <div class="row">
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="{{url_for('static', filename='/assets/img/speakers/1.jpg')}}" alt="Speaker 1" class="img-fluid">
+              <div class="details">
+                <h3><a href="speaker-details.html">Anikait Sahota</a></h3>
+                <p>Quas alias incidunt</p>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-google-plus"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="{{url_for('static', filename='/assets/img/speakers/2.jpg')}}" alt="Speaker 2" class="img-fluid">
+              <div class="details">
+                <h3><a href="speaker-details.html">Anshul Mendiratta</a></h3>
+                <p>Consequuntur odio aut</p>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-google-plus"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="{{url_for('static', filename='/assets/img/speakers/2.jpg')}}" alt="Speaker 3" class="img-fluid">
+              <div class="details">
+                <h3><a href="speaker-details.html">Nandini</a></h3>
+                <p>Fugiat laborum et</p>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-google-plus"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="{{url_for('static', filename='/assets/img/speakers/2.jpg')}}" alt="Speaker 4" class="img-fluid">
+              <div class="details">
+                <h3><a href="speaker-details.html">Sanskar Sachdeva</a></h3>
+                <p>Debitis iure vero</p>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-google-plus"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="{{url_for('static', filename='/assets/img/speakers/2.jpg')}}" alt="Speaker 5" class="img-fluid">
+              <div class="details">
+                <h3><a href="speaker-details.html">Utkarsh Sharma</a></h3>
+                <p>Qui molestiae natus</p>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-google-plus"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="{{url_for('static', filename='/assets/img/speakers/2.jpg')}}" alt="Speaker 6" class="img-fluid">
+              <div class="details">
+                <h3><a href="speaker-details.html">Willow Trantow</a></h3>
+                <p>Non autem dicta</p>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-google-plus"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section><!-- End Speakers Section -->
+
+   
+        
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+
+       
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h4>Contact Us</h4>
+            <p>
+            
+             
+              <strong>Email:</strong> info@example.com<br>
+              <strong>Email:</strong> info@example.com<br>
+              <strong>Email:</strong> info@example.com<br>
+              <strong>Email:</strong> info@example.com<br>
+              <strong>Email:</strong> info@example.com<br>
+            </p>
+
+            <div class="social-links">
+              <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+              <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+              <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
+              <a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
+              <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong>TheEvent</strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        <!--
+        All the links in the footer should remain intact.
+        You can delete the links only if you purchased the pro version.
+        Licensing information: https://bootstrapmade.com/license/
+        Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=TheEvent
+      -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+  </footer><!-- End  Footer -->
+
+  <a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{{url_for('static', filename='/assets/vendor/jquery/jquery.min.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/jquery.easing/jquery.easing.min.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/php-email-form/validate.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/wow/wow.min.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/venobox/venobox.min.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/owl.carousel/owl.carousel.min.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/superfish/superfish.min.js')}}"></script>
+  <script src="{{url_for('static', filename='/assets/vendor/hoverIntent/hoverIntent.js')}}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{{url_for('static', filename='/assets/js/main.js')}}"></script>
+
+</body>
+
+</html>
