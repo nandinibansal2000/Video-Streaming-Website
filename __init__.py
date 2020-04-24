@@ -23,12 +23,6 @@ app = Flask(__name__)
 # 	  passwd="passwd",
 # 	  database="mydb"
 # 	)
-mydb = mysql.connector.connect(
-	  host="localhost",
-	  user="user",
-	  passwd="password",
-	  database="newdb"
-	)
 
 @app.route('/')
 def home():
@@ -157,17 +151,70 @@ def artistPage(AID):
 	merch_embed1 = merchandise.getMerchandiseHTML(arr, img_addr1)
 	return render_template("artists.html", name=name1, age=age1, top_genre=genre, user_rating=uRating, imdb=imdb1, table=table1, merch_embed=merch_embed1)
 
-def user_signup(c,conn,username,password,designation,age):
-	c.execute("SELECT MAX(UID) FROM Users ")+1
-	m= c.fetchone() 
-	ID=int(m[0]+1)
+def user_signup(username,age,fam):
+	print("fjnckf")
+	mycursor = mydb.cursor()
+	sql = "SELECT MAX(UID) FROM Users "
+	mycursor.execute(sql)
+	c=mycursor.fetchall()
+	print(fam)
+	if(str(fam)=="NO"):
+		sql = "SELECT MAX(FamilyID) FROM Family "
+		mycursor.execute(sql)
+		f=mycursor.fetchall()
+
+		print(f,"fffffffffffff")
+		fam = int(f[0][0])+1
+		sql="insert into Family values('%s','%s')"%(fam,"false")
+		mycursor.execute(sql)
+
+
+	# print(c)
+	# c.execute("SELECT MAX(UID) FROM Users ")+1
+	# m= c.fetchone() 
+	ID=int(c[0][0])+1
+	print(ID,"wfjcklwcd")
+	print("fnvjfdv")
+	print(fam)
+	sql = "insert into Users values('%s','%s','%s','%s','%s','%s','%s','%s')"%(ID,username,fam,username,age,'0',0,"none")
+	# sql="INSERT INTO Users(UID,LoginID,Name,Age,IndividualPayment,AvgTime,SubscriptionType) VALUES(%s,%s,%s,%s,%s,%s,%s)",(ID,username,username,age,'0',0,"none")
+	mycursor.execute(sql)
+	
+
+	session['logged_in'] = True
+	session['username'] = username
+
+def artist_signup(username,age):
+	mycursor = mydb.cursor()
+	sql = "SELECT MAX(ArtistID) FROM Artists "
+	mycursor.execute(sql)
+	c=mycursor.fetchall()
+	# c.execute("SELECT MAX(UID) FROM Users ")+1
+	# m= c.fetchone() 
+	ID=int(c[0][0])+1
 	print(ID)
-	c.execute("INSERT INTO Users(UID,LoginID,Name,Age,IndividualPayment,AvgTime,SubscriptionType) VALUES(%s,%s,%s,%s,%s,%s,%s)",(ID,username,username,age,'0',0,"none"))
-	conn.commit()
-	flash("Thanks for registering!")
-	c.close()
-	conn.close()
-	gc.collect()
+	sql = "insert into Artists values('%s','%s','%s')"%(ID,username,age)
+
+	# sql="INSERT INTO Artists(ArtistID,Name,Age) VALUES(%s,%s,%s)",(ID,username,age)
+	mycursor.execute(sql)
+	print("lllalallalala")
+
+	
+
+	session['logged_in'] = True
+	session['username'] = username
+
+def production_signup(username):
+	mycursor = mydb.cursor()
+	sql = "SELECT MAX(PHID) FROM Production_Houses "
+	mycursor.execute(sql)
+	c=mycursor.fetchall()
+	ID=int(c[0][0])+1
+	print(ID)
+	sql = "insert into Production_Houses values('%s','%s','%s','%s')"%(ID,username,"0",username)
+	# sql="INSERT INTO Production_Houses(PHID,LoginID,Overall_Rating,Name) VALUES(%s,%s,%s)",(ID,username,0,username)
+	print(sql)
+	mycursor.execute(sql)
 	
 
 	session['logged_in'] = True
@@ -183,8 +230,12 @@ def user_signup(c,conn,username,password,designation,age):
 # 	password = PasswordField('New Password', [validators.Required(),validators.EqualTo('confirm', message='Passwords must match')])
 # 	confirm = PasswordField('Repeat Password')
 # 	# accept_tos = BooleanField('I accept the Terms of Service and Privacy Notice (updated Jan 22, 2015)', [validators.Required()])
-
-
+def ARTISTID(mydb, input_LogonID):
+    mycursor = mydb.cursor()
+    sql = "SELECT ArtistID FROM Artists WHERE Name='%s'"%(input_LogonID)
+    mycursor.execute(sql)
+    print(mycursor.fetchall()[0][0],"kkkk")
+    return 301
 
 @app.route('/', methods = ['GET','POST']) 
 def get_data():
@@ -193,6 +244,7 @@ def get_data():
 		print("aaaaa")
 		if request.method == "POST":
 			if( "signup" in request.form):
+				print("kkkkkkkllllllllll")
 				username  = request.form["uname"]
 				# email = form.email.data
 				#	password = sha256_crypt.encrypt((str(request.form["psw"])))
@@ -201,61 +253,86 @@ def get_data():
 				# password = request.form["psw"]
 				designation= request.form["designation"]
 				age  = request.form["age"]
+				fam = request.form["fam"]
 	
 				# print("kljh")
 				# print(username)
 				# print(type(username))
-				c, conn = connection()
-				# print("erjkh")
-				x = c.execute("SELECT * FROM Passwords WHERE LoginID = '%s'"%
-						  (username))
-				# print("erkljkgt")
-				# print(x)
-				if int(x) > 0:
+				print("cccccccccccccccc")
+				mycursor = mydb.cursor()
+				sql = "SELECT * FROM Passwords WHERE LoginID = '%s'"%(username)
+				mycursor.execute(sql)
+				x=mycursor.fetchall()
+				
+				if len(x) > 0:
 
 					flash("That username is already taken, please choose another")
-					return render_template('register.html')
+					return render_template('main.html')
 
 				else:
 					print("pppp")
-					c.execute("INSERT INTO Passwords VALUES (%s, %s,%s)",
-							  (thwart(username),thwart(password),thwart(designation)))
+					# sql ="INSERT INTO Passwords VALUES (%s, %s,%s)",(username,password,designation)
+					sql = "insert into Passwords values('%s', '%s', '%s')"%(username,password,designation)
+					print(sql,"skcldsc")
+					mycursor.execute(sql)
 				
-					# print("llll")
+				
+					print("llll")
 					
 					flash("Thanks for registering!")
 					
 					if(designation=="User"):
 
-						user_signup(c,conn,username,password,designation,age)
+						user_signup(username,age,fam)
 						uid1 = utkarsh.getUID(mydb, username)
 						return redirect(url_for('userPage', UID=uid1))
+					elif(designation=="Artist"):
+
+						artist_signup(username,age)
+						uid1 = ARTISTID(mydb, username)
+						print(uid1)
+						return redirect(url_for('artistPage', AID=uid1))
+
+					elif(designation=="Production"):
+
+						production_signup(username)
+						uid1 = productionHouse.PhID(mydb, username)
+						return redirect(url_for('productionHousePage', PID=uid1))
 			else:
 				username  = request.form["name"]
 				# email = form.email.data
 				#	password = sha256_crypt.encrypt((str(request.form["psw"])))
 				# print("lol")
-				password = request.form["pass"]
+				password = sha256_crypt.encrypt((str(request.form["psw"])))
+				# password = request.form["pass"]
 				# password = sha256_crypt.encrypt(password)
 				# print("poi")
 				# print(username,password)
 				print("yayy")
-				c, conn = connection()
-				# print("erjkh")
-				x = c.execute("SELECT * FROM Passwords WHERE LoginID = '%s' AND passwd='%s'"%
-						  (username,password))
+				mycursor = mydb.cursor()
+				sql = "SELECT Designation FROM Passwords WHERE LoginID = '%s' AND passwd='%s'"% (username,password)
+				mycursor.execute(sql)
+				x=mycursor.fetchall()
+				
 				print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"+str(x))
 				print(x)
-				if(int(x)==1):
+				if(x=="User"):
 					uid1 = utkarsh.getUID(mydb, username)
 					return redirect(url_for('userPage', UID=uid1))
+				elif(x=="Artist"):
+					uid1 = ARTISTID(mydb, username)
+					print(uid1)
+					return redirect(url_for('artistPage', AID=uid1))
+				elif(x=="Production"):
+					uid1 = productionHouse.PhID(mydb, username)
+					return redirect(url_for('productionHousePage', PID=uid1))
 				else:
 					# print("oooof")
 					flash("Wrong Credentials")
-					return render_template("register.html")
+					return render_template("main.html")
 
 
-		return render_template("register.html")
+		return render_template("main.html")
 	except Exception as e:
 		return (str(e))
 
@@ -266,5 +343,14 @@ if __name__ == '__main__':
 	# app.config['SESSION_TYPE'] = 'filesystem'
 
 	# session.init_app(app)
+
+
+	import mysql.connector
+	mydb = mysql.connector.connect(
+	host="localhost",
+	user="new",
+	passwd="password",
+	database="mydb"
+	)
 	app.secret_key = 'SECRET KEY'
 	app.run(debug=True) 
