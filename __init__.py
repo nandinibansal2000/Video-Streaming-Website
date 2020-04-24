@@ -129,7 +129,15 @@ def productionHousePage(PID):
 	movies = productionHouse.getMovies(mycursor, name1)
 	upcoming_movies = productionHouse.getUpcomingMovies(mycursor, PID)
 	graph1 = productionHouse.graph1(mycursor, PID)
-	graph2 = productionHouse.graph2(mycursor, PID)
+	
+	if(movies==""):
+		line_chart = pygal.HorizontalBar()
+		line_chart.title = "Number of users corresponding to Age"
+		graph2 = line_chart.render_data_uri()
+
+	else:
+		graph2 = productionHouse.graph2(mycursor, PID)
+		
 	gvr = productionHouse.genreVSrating(mycursor, PID)
 	url = "/upload/"+str(PID)
 	img_addr1 = url_for('static', filename='images/merch.jpeg')
