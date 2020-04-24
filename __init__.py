@@ -355,7 +355,7 @@ if __name__ == '__main__':
 	mydb = mysql.connector.connect(
 	host="localhost",
 	user="new",
-	passwd="jatin1995@2000",
+	passwd="passwd",
 	database="mydb"
 	)
 	app.secret_key = 'SECRET KEY'
