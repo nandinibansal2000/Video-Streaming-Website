@@ -208,6 +208,27 @@ def dislikeMerch(mycursor, merch):
 	sql_query2 = ("UPDATE MERCHANDISE SET DISLIKES = %s WHERE MERCHID = %s")
 	vals = (updated_dislikes, merch)
 	mycursor.execute(sql_query2, vals)
+	
+def getLikes(mycursor, merch):
+	#Get number of likes for some merch
+
+	merchID = (merch, )
+	sql_query = ("SELECT LIKES FROM MERCHANDISE WHERE MERCHID = %s")
+	mycursor.execute(sql_query, merchID)
+	curr_likes = mycursor.fetchone()
+	curr_likes = curr_likes[0]
+	return curr_likes
+
+def getDislikes(mycursor, merch):
+	#Get number of likes for some merch
+
+	merchID = (merch, )
+	sql_query = ("SELECT DISLIKES FROM MERCHANDISE WHERE MERCHID = %s")
+	mycursor.execute(sql_query, merchID)
+	curr_dislikes = mycursor.fetchone()
+	curr_dislikes = curr_dislikes[0]
+	return curr_dislikes	
+
 
 
 # cursor = getCursor(mydb)
