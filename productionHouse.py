@@ -7,18 +7,20 @@ import mysql.connector
 import pygal
 
 
-# mydb = mysql.connector.connect(
+mydb = mysql.connector.connect(
 
-# 	host="localhost",
-# 	user="Drigil",
-# 	passwd="Anshul12",
-# 	database = "dbmsproject",
-# 	auth_plugin="mysql_native_password"
+	host="localhost",
+	user="Drigil",
+	passwd="Anshul12",
+	database = "dbmsproject",
+	auth_plugin="mysql_native_password"
 
-# )
+)
 
 # if(mydb.is_connected()):
 # 	print("Successfully Connected")
+
+
 def PhID(mydb, input_LogonID):
 	mycursor = mydb.cursor()
 	sql = "SELECT PHID FROM Production_Houses WHERE LoginID='%s'"%(input_LogonID)
@@ -49,7 +51,11 @@ def getMovies(mycursor, productionHouse):
 def getName(mycursor, PID):
 	sql = "SELECT Name from Production_Houses where PHID='%d'"%(PID)
 	mycursor.execute(sql)
-	return mycursor.fetchall()[0][0]
+	name = mycursor.fetchall()
+	if(len(name)==0):
+		return None
+	else:
+		return name[0][0]
 
 def getMovieViewersFromMovie(mycursor, movie):
 	#Get the list of people who watched the given movie
@@ -206,9 +212,10 @@ def graph2(mycursor, PHID):
 
 # cursor = getCursor(mydb)
 # arr = getMovies(cursor, "Sony Pictures Motion Picture Group")
-# arr2 = groupMoviesByGenre(cursor, arr)
-# graphGenreVSMovies(arr2)
+# # arr2 = groupMoviesByGenre(cursor, arr)
+# # graphGenreVSMovies(arr2)
 
 # arr3 = getMovieViewersFromMovieList(cursor, arr)
 # arr4 = groupUsersByAge(cursor, arr3)
+# print(arr4)
 # graphUsersVSAge(arr4)
