@@ -114,6 +114,101 @@
   to {transform: scale(1)}
 }
 
+/*====================================*/
+ #UploadPopup1 input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+#UploadPopup1 button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+#UploadPopup1 button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+#UploadPopup1 .cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+/* Center the image and position the close button */
+#UploadPopup1 .imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+#UploadPopup1 img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+#UploadPopup1 .container {
+  padding: 16px;
+}
+
+#UploadPopup1 span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+
+
+/* Modal Content/Box */
+#UploadPopup1 .modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 40%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+#UploadPopup1 .close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+#UploadPopup1 .close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+#UploadPopup1 .animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+#UploadPopup1 @-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+#UploadPopup1 @keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
 	</style>
 </head>
 <body>
@@ -144,12 +239,47 @@
 
       
     </form>
+
+  </div>
+
+  <div id="UploadPopup1" class="modal">
+  
+  <form method="POST" class="modal-content animate" action="{{url_upload}}" >
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('UploadPopup1').style.display='none'" class="close" title="Close Modal">&times;</span>
+     
+    </div>
+    <!-- mydb, productionHouseID, name, IMDB, duration, genre -->
+    <div class="container">
+      <label for="name"><b>Movie name</b></label>
+      <input type="text" placeholder="Enter the movie name" name="name" required>
+
+      <label for="duration"><b>Duration</b></label>
+      <input type="text" placeholder="Enter the duration" name="duration" required>
+
+      <label for="genre"><b>Genre</b></label>
+      <input type="text" placeholder="Enter the Genre" name="genre" required>
+
+      <label for="release"><b>Release Date</b></label>
+      <input type="text" placeholder="Enter the IMDB Rating" name="release" required>
+
+      <button type="submit" name="upcoming" value="Send" onclick="closeForm1()">Upload
+      </button>
+        </div>
+
+      
+    </form>
+  
   </div>
 	<div class="container" id="head">
 		<div class="pos-f-t">
 		  <div class="collapse" id="navbarToggleExternalContent">
 		    <div class="bg-dark p-4">
+
+		      <button type="button" class="btn btn-secondary btn-lg btn-block" onclick="openForm1()">Upcoming Movie</button>
 		      <button type="button" class="btn btn-secondary btn-lg btn-block" onclick="openForm()">Upload Movie</button>
+
+
 		      <a href="/"><button type="button" class="btn btn-secondary btn-lg btn-block">Log Out</button></a>
 		    </div>
 		  </div>
@@ -229,6 +359,13 @@
 
 		function closeForm() {
 		  document.getElementById("UploadPopup").style.display = "none";
+		}
+		function openForm1() {
+		  document.getElementById("UploadPopup1").style.display = "block";
+		}
+
+		function closeForm1() {
+		  document.getElementById("UploadPopup1").style.display = "none";
 		}
 	</script>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
