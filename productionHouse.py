@@ -5,7 +5,7 @@
 
 import mysql.connector
 import pygal
-
+import Movies
 
 # mydb = mysql.connector.connect(
 
@@ -88,14 +88,31 @@ def getUpcomingMovies(mycursor, PHID):
 		ans += "<tr> <td>'%s'</td> <td>'%s'</td> <td>'%s'</td> <td>'%s'</td> </tr>"%(x[1], x[2], x[3], x[5])
 	return ans
 
-def uploadMovie(mydb, productionHouseID, name, IMDB, duration, genre):
+def uploadMovie(mydb, productionHouseID, name, IMDB, duration, genre, PrequelID=-1):
 	#upload movie
 	mycursor = mydb.cursor()
-	sql_query = ("INSERT INTO Upcoming_movies (P_HOUSEID, MOVIE_NAME, IMDB, DURATION, GENRE) VALUES (%s, %s, %s, %s, %s)")
+	sql_query = ("INSERT INTO Movies (P_HOUSEID, MOVIE_NAME, IMDB, DURATION, GENRE) VALUES (%s, %s, %s, %s, %s)")
 	entry = (productionHouseID, name, IMDB, duration, genre)
 	mycursor.execute(sql_query, entry)
 	#Uncomment when you want to make changes permanent
 	mydb.commit()
+	if(PrequelID!=-1):
+		MovieID = Movies.getMovieID(mydb , name)
+		print("MovieID")
+		print(type(MovieID))
+		print(MovieID)
+		sql = "INSERT INTO `Prequel/Sequel` (PrequelID, Movie, SequelID) VALUES (%d, %d, %d)"%(PrequelID, MovieID, -1)
+		mycursor.execute(sql)
+		sql = "UPDATE `Prequel/Sequel` SET SequelID=%d WHERE Movie=%d"%(MovieID, PrequelID)
+		mycursor.execute(sql)
+		mydb.commit()
+		# sql = "SELECT * FROM `Prequel/Sequel` WHERE Movie=%d"%(PrequelID)
+		# mycursor.execute(sql)
+		# arr = mycursor.fetchall()
+		# if(len(arr)==0):
+		# 	sql = "INSERT INTO `Prequel/Sequel` (PrequelID, Movie, SequelID) VALUES (%d, %d, %d)"%(-1, PrequelID, MovieID)
+		# 	mycursor.execute(sql)
+		# 	mydb.commit()
 
 def uploadUpcomingMovie(mydb, productionHouseID, name, release, duration, genre):
 	#upload movie

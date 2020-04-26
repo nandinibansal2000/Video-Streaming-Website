@@ -97,9 +97,12 @@ def getOverall_Rating(mydb , MovieID) :
     mycursor.execute(sql)
     result = mycursor.fetchall() ;
     if( len(result) == 0 ) :
-        return None
+        return 0
     elif( len(result) == 1 ) :
-        return result[0][0]
+        r = result[0][0]
+        if(r==None):
+            r = 0
+        return r
     else :
         return result # if something is buggy
 def RefreshOverall_Rating(mydb , MovieID) : # it must be like refreshing the rating after any updation in the watchlist rating by any user .

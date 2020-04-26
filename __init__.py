@@ -44,8 +44,12 @@ def upload(PID):
 			duration = request.form["duration"]
 			genre = request.form["genre"]
 			IMDB = request.form["imdb"]
-			print(PID, name, IMDB, duration, genre)
-			productionHouse.uploadMovie(mydb, PID, name, IMDB, duration, genre)
+			prequelID = request.form["PrequelID"]
+			print(PID, name, IMDB, duration, genre, prequelID)
+			if(prequelID==""):
+				productionHouse.uploadMovie(mydb, PID, name, IMDB, duration, genre)
+			else:
+				productionHouse.uploadMovie(mydb, PID, name, IMDB, duration, genre, int(prequelID))
 		elif ("upcoming" in request.form):
 			name = request.form["name"]
 			duration = request.form["duration"]
