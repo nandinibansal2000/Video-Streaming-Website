@@ -158,9 +158,11 @@
 		<div class="jumbotron jumbotron-fluid">
 		  <div class="container">
 		    <h1 class="display-4" align="center">{{ name }}</h1>
-		    
 		  </div>
 		</div>
+		{{ prequel | safe}}
+		
+		
 		<img onclick="javascript:openForm()" src="{{ url_for('static', filename='images/banner.jpg') }}" class="img-fluid" alt="Movie Banner" width="100%">
 		<p></p>
 		<div class="jumbotron jumbotron-fluid">

@@ -181,6 +181,38 @@ def getArtists(mydb, MovieID, img_addr):
     return ans
 # "SELECT W.MovieID FROM Watch_List W WHERE W.UID in (SELECT W.UID , count(*) FROM Watch_List W WHERE W.MovieID in (SELECT DISTINCT MovieID from Watch_List WHERE UID = 1) GROUP BY W.UID HAVING count(*) > 0 ORDER BY count(*)) ;"
 
+def getPrequelSequel(mydb, UID, MovieID):
+    mycursor = mydb.cursor()
+    sql = "SELECT PrequelID, SequelID from `Prequel/Sequel` WHERE Movie='%d'"%(MovieID)
+    mycursor.execute(sql)
+    result = mycursor.fetchall();
+    if(len(result)==0):
+        return;
+    PrequelID = result[0][0]
+    SequelID = result[0][1]
+    if(PrequelID!=-1):
+        PrequelName = getMovieName(mydb, PrequelID)
+        PrequelURL = "/user/"+str(UID)+"/movie/"+str(PrequelID)
+    else:
+        PrequelName = "None"
+        PrequelURL = "#"
+    if(SequelID!=-1):
+        SequelName = getMovieName(mydb, SequelID)
+        SequelURL = "/user/"+str(UID)+"/movie/"+str(SequelID)
+    else:
+        SequelName = "None"
+        SequelURL = "#"
+    ans = """<div class="row">
+            <div class="col-6">
+                <a href="%s"><h4 align="left">Prequel: %s</h4></a>
+            </div>
+            <div class="col-6">
+                <a href="%s"><h4 align="right">Sequel: %s</h4></a>
+            </div>
+        </div>"""%(PrequelURL, PrequelName, SequelURL, SequelName)
+    return ans
+
+
 # +----------------+--------------+------+-----+---------+-------+
 # | Field          | Type         | Null | Key | Default | Extra |
 # +----------------+--------------+------+-----+---------+-------+

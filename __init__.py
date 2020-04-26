@@ -115,7 +115,8 @@ def moviePage(UID, MovieID):
 	img_addr1 = url_for('static', filename='images/merch.jpeg')
 	arr = merchandise.getMerchandiseFromMovie(mydb, MovieID)
 	merch_embed1 = merchandise.getMerchandiseHTML(arr, img_addr1)
-	return render_template("movie.html", hours=Hours1, name=name1, genre=genre1, imdb=imdb1, prating=prating1, phouse=phouse1, duration=duration1, artist_embed=artists, url=url1, merch_embed=merch_embed1)
+	prequel1 = Movies.getPrequelSequel(mydb, UID, MovieID)
+	return render_template("movie.html", hours=Hours1, name=name1, genre=genre1, imdb=imdb1, prating=prating1, phouse=phouse1, duration=duration1, artist_embed=artists, url=url1, merch_embed=merch_embed1, prequel=prequel1)
 
 @app.route('/movie/<int:MovieID>')
 def movieInfoPage(MovieID):
