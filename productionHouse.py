@@ -7,15 +7,15 @@ import mysql.connector
 import pygal
 
 
-mydb = mysql.connector.connect(
+# mydb = mysql.connector.connect(
 
-	host="localhost",
-	user="Drigil",
-	passwd="Anshul12",
-	database = "dbmsproject",
-	auth_plugin="mysql_native_password"
+# 	host="localhost",
+# 	user="Drigil",
+# 	passwd="Anshul12",
+# 	database = "dbmsproject",
+# 	auth_plugin="mysql_native_password"
 
-)
+# )
 
 # if(mydb.is_connected()):
 # 	print("Successfully Connected")
@@ -91,8 +91,17 @@ def getUpcomingMovies(mycursor, PHID):
 def uploadMovie(mydb, productionHouseID, name, IMDB, duration, genre):
 	#upload movie
 	mycursor = mydb.cursor()
-	sql_query = ("INSERT INTO Movies (P_HOUSEID, MOVIE_NAME, IMDB, DURATION, GENRE) VALUES (%s, %s, %s, %s, %s)")
+	sql_query = ("INSERT INTO Upcoming_movies (P_HOUSEID, MOVIE_NAME, IMDB, DURATION, GENRE) VALUES (%s, %s, %s, %s, %s)")
 	entry = (productionHouseID, name, IMDB, duration, genre)
+	mycursor.execute(sql_query, entry)
+	#Uncomment when you want to make changes permanent
+	mydb.commit()
+
+def uploadUpcomingMovie(mydb, productionHouseID, name, release, duration, genre):
+	#upload movie
+	mycursor = mydb.cursor()
+	sql_query = ("INSERT INTO Upcoming_movies (Production_HouseID, MOVIE_NAME, Release_Date, Duration, GENRE) VALUES (%s, %s, %s, %s, %s)")
+	entry = (productionHouseID, name, release, duration, genre)
 	mycursor.execute(sql_query, entry)
 	#Uncomment when you want to make changes permanent
 	mydb.commit()

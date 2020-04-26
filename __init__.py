@@ -17,12 +17,12 @@ import merchandise
 
 app = Flask(__name__)
 
-# mydb = mysql.connector.connect(
-# 	  host="localhost",
-# 	  user="user",
-# 	  passwd="passwd",
-# 	  database="mydb"
-# 	)
+mydb = mysql.connector.connect(
+	  host="localhost",
+	  user="user",
+	  passwd="password",
+	  database="newdb"
+	)
 
 @app.route('/')
 def home():
@@ -46,6 +46,14 @@ def upload(PID):
 			IMDB = request.form["imdb"]
 			print(PID, name, IMDB, duration, genre)
 			productionHouse.uploadMovie(mydb, PID, name, IMDB, duration, genre)
+		elif ("upcoming" in request.form):
+			name = request.form["name"]
+			duration = request.form["duration"]
+			genre = request.form["genre"]
+			release = request.form["release"]
+			print(PID, name, release, duration, genre)
+			productionHouse.uploadUpcomingMovie(mydb, PID, name, release, duration, genre)
+				
 	return redirect(url_for('productionHousePage', PID=PID))
 @app.route("/payment/<UID>", methods=['POST'])
 def payment(UID):
@@ -360,11 +368,11 @@ if __name__ == '__main__':
 
 
 	import mysql.connector
-	mydb = mysql.connector.connect(
-	host="localhost",
-	user="new",
-	passwd="passwd",
-	database="mydb"
-	)
+	# mydb = mysql.connector.connect(
+	# host="localhost",
+	# user="new",
+	# passwd="passwd",
+	# database="mydb"
+	# )
 	app.secret_key = 'SECRET KEY'
 	app.run(debug=True) 
