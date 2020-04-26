@@ -35,6 +35,22 @@ def Dashboard():
 def register():
 	return render_template("register.html")
 
+@app.route('/likeMerch/<MerchID>')
+def likeMerch(MerchID):
+	MerchID = int(MerchID)
+	mycursor = mydb.cursor()
+	merchandise.likeMerch(mycursor, MerchID)
+	return "You have liked a merch.\n THANK YOU!!!"
+
+@app.route('/dislikeMerch/<MerchID>')
+def dislikeMerch(MerchID):
+	MerchID = int(MerchID)
+	mycursor = mydb.cursor()
+	merchandise.dislikeMerch(mycursor, MerchID)
+	return "You have disliked a merch.\n THANK YOU!!!"
+
+
+
 @app.route("/upload/<PID>", methods=['POST'])
 def upload(PID):
 	PID = int(PID)

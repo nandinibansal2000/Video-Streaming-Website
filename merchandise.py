@@ -61,16 +61,18 @@ def getMerchandiseHTML(arr, img_addr):
 			  <img src="%s" class="d-block w-100" alt="Merch"></a>
 			  <div class="carousel-caption d-none d-md-block">
 				<h5>%s</h5>
+				<p><a href="%s">Like</a> | <a href="%s">Dislike</a></p>
 			  </div>
-			</div>"""%(arr[0][2], img_addr, arr[0][1])
+			</div>"""%(arr[0][2], img_addr, arr[0][1], "/likeMerch/"+str(arr[0][0]), "/dislikeMerch/"+str(arr[0][0]))
 	for i in range(1, len(arr)):
 		ans += """<div class="carousel-item">
 			 <a href = "%s">
 			  <img src="%s" class="d-block w-100" alt="Merch"></a>
 			  <div class="carousel-caption d-none d-md-block">
 				<h5>%s</h5>
+				<p><a href="%s">Like</a> | <a href="%s">Dislike</a></p>
 			  </div>
-			</div>"""%(arr[i][2], img_addr, arr[i][1])
+			</div>"""%(arr[i][2], img_addr, arr[i][1], "/likeMerch/"+str(arr[0][0]), "/dislikeMerch/"+str(arr[0][0]))
 	ans += """</div>
 		  <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
 			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -183,13 +185,13 @@ def likeMerch(mycursor, merch):
 	#Like the merch of the given merchID
 	
 	merchID = (merch, )
-	sql_query = ("SELECT LIKES FROM MERCHANDISE WHERE MERCHID = %s")
+	sql_query = ("SELECT LIKES FROM Merchandise WHERE MERCHID = %s")
 	mycursor.execute(sql_query, merchID)
 	curr_likes = mycursor.fetchone()
 	curr_likes = curr_likes[0]
 	
 	updated_likes = curr_likes + 1
-	sql_query2 = ("UPDATE MERCHANDISE SET LIKES = %s WHERE MERCHID = %s")
+	sql_query2 = ("UPDATE Merchandise SET LIKES = %s WHERE MERCHID = %s")
 	vals = (updated_likes, merch)
 	mycursor.execute(sql_query2, vals)
 	#Uncomment when you want to make changes permanent
@@ -199,13 +201,13 @@ def dislikeMerch(mycursor, merch):
 	#Dislike the merch of the given merchID
 
 	merchID = (merch, )
-	sql_query = ("SELECT DISLIKES FROM MERCHANDISE WHERE MERCHID = %s")
+	sql_query = ("SELECT DISLIKES FROM Merchandise WHERE MERCHID = %s")
 	mycursor.execute(sql_query, merchID)
 	curr_dislikes = mycursor.fetchone()
 	curr_dislikes = curr_dislikes[0]
 	
 	updated_dislikes = curr_dislikes + 1
-	sql_query2 = ("UPDATE MERCHANDISE SET DISLIKES = %s WHERE MERCHID = %s")
+	sql_query2 = ("UPDATE Merchandise SET DISLIKES = %s WHERE MERCHID = %s")
 	vals = (updated_dislikes, merch)
 	mycursor.execute(sql_query2, vals)
 	
@@ -213,7 +215,7 @@ def getLikes(mycursor, merch):
 	#Get number of likes for some merch
 
 	merchID = (merch, )
-	sql_query = ("SELECT LIKES FROM MERCHANDISE WHERE MERCHID = %s")
+	sql_query = ("SELECT LIKES FROM Merchandise WHERE MERCHID = %s")
 	mycursor.execute(sql_query, merchID)
 	curr_likes = mycursor.fetchone()
 	curr_likes = curr_likes[0]
@@ -223,7 +225,7 @@ def getDislikes(mycursor, merch):
 	#Get number of likes for some merch
 
 	merchID = (merch, )
-	sql_query = ("SELECT DISLIKES FROM MERCHANDISE WHERE MERCHID = %s")
+	sql_query = ("SELECT DISLIKES FROM Merchandise WHERE MERCHID = %s")
 	mycursor.execute(sql_query, merchID)
 	curr_dislikes = mycursor.fetchone()
 	curr_dislikes = curr_dislikes[0]
