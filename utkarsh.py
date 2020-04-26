@@ -38,15 +38,24 @@ def getUID(mydb, input_LogonID):
 
 def getHoursWatched(mydb, input_UID):
 	mycursor = mydb.cursor()
-	refreshAverageTime()
+	refreshAverageTime(mydb, input_UID)
 	sql = "SELECT AvgTime FROM Users WHERE UID='%d'"%(input_UID)
 	mycursor.execute(sql)
 	return  mycursor.fetchall()
 
 
-def refreshAverageTime():
-	# Calculate average time from WatchHistory and Update AvgTime in Users
-	pass
+def refreshAverageTime(mydb, input_UID):
+	mycursor = mydb.cursor()
+	sql = "SELECT Movies.Duration FROM Watch_List LEFT JOIN Movies ON Watch_List.MovieID=Movies.Movie_id WHERE Watch_List.UID='%d'"%(input_UID)
+	mycursor.execute(sql)
+	myresult =  mycursor.fetchall()
+	total = 0
+	for x in myresult:
+		total += int(x[0])
+	total = int(total/60)
+	sql = "UPDATE Users SET AvgTime=%d WHERE UID=%d"%(total, input_UID)
+	mycursor.execute(sql)
+	mydb.commit()
 
 def searchMovie(mydb, movieName, input_UID):
 	mycursor = mydb.cursor()
@@ -75,6 +84,7 @@ def makePaymentForFamily(mydb, input_UID):
 
 
 def checkPayment(mydb, input_UID):
+	input_UID = int(input_UID)
 	mycursor = mydb.cursor()
 	sql = "SELECT IndividualPayment, FamilyID FROM Users WHERE UID='%d'"%(input_UID)
 	mycursor.execute(sql)

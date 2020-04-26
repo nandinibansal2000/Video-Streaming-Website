@@ -90,7 +90,7 @@ def payment(UID):
 @app.route("/Rating/<UID>/<MovieID>", methods=['POST'])
 def Rating(UID, MovieID):
 	if(not utkarsh.checkPayment(mydb, UID)):
-		return render_template("<h1>Please make payment to watch the movie</h1>")
+		return "<h1>Please make payment to watch the movie</h1>"
 	if request.method == "POST":
 		if( "rate" in request.form):
 			rating = request.form["rating"]
