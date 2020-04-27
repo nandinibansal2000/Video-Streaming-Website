@@ -5,17 +5,18 @@
 
 import mysql.connector
 import pygal
-import Movies
+import operator
 
-# mydb = mysql.connector.connect(
 
-# 	host="localhost",
-# 	user="Drigil",
-# 	passwd="Anshul12",
-# 	database = "dbmsproject",
-# 	auth_plugin="mysql_native_password"
+mydb = mysql.connector.connect(
 
-# )
+	host="localhost",
+	user="Drigil",
+	passwd="Anshul12",
+	database = "dbmsproject",
+	auth_plugin="mysql_native_password"
+
+)
 
 # if(mydb.is_connected()):
 # 	print("Successfully Connected")
@@ -88,37 +89,12 @@ def getUpcomingMovies(mycursor, PHID):
 		ans += "<tr> <td>'%s'</td> <td>'%s'</td> <td>'%s'</td> <td>'%s'</td> </tr>"%(x[1], x[2], x[3], x[5])
 	return ans
 
-def uploadMovie(mydb, productionHouseID, name, IMDB, duration, genre, PrequelID=-1):
+def uploadMovie(mydb, productionHouseID, name, IMDB, duration, genre):
+	
 	#upload movie
 	mycursor = mydb.cursor()
 	sql_query = ("INSERT INTO Movies (P_HOUSEID, MOVIE_NAME, IMDB, DURATION, GENRE) VALUES (%s, %s, %s, %s, %s)")
 	entry = (productionHouseID, name, IMDB, duration, genre)
-	mycursor.execute(sql_query, entry)
-	#Uncomment when you want to make changes permanent
-	mydb.commit()
-	if(PrequelID!=-1):
-		MovieID = Movies.getMovieID(mydb , name)
-		print("MovieID")
-		print(type(MovieID))
-		print(MovieID)
-		sql = "INSERT INTO `Prequel/Sequel` (PrequelID, Movie, SequelID) VALUES (%d, %d, %d)"%(PrequelID, MovieID, -1)
-		mycursor.execute(sql)
-		sql = "UPDATE `Prequel/Sequel` SET SequelID=%d WHERE Movie=%d"%(MovieID, PrequelID)
-		mycursor.execute(sql)
-		mydb.commit()
-		# sql = "SELECT * FROM `Prequel/Sequel` WHERE Movie=%d"%(PrequelID)
-		# mycursor.execute(sql)
-		# arr = mycursor.fetchall()
-		# if(len(arr)==0):
-		# 	sql = "INSERT INTO `Prequel/Sequel` (PrequelID, Movie, SequelID) VALUES (%d, %d, %d)"%(-1, PrequelID, MovieID)
-		# 	mycursor.execute(sql)
-		# 	mydb.commit()
-
-def uploadUpcomingMovie(mydb, productionHouseID, name, release, duration, genre):
-	#upload movie
-	mycursor = mydb.cursor()
-	sql_query = ("INSERT INTO Upcoming_movies (Production_HouseID, MOVIE_NAME, Release_Date, Duration, GENRE) VALUES (%s, %s, %s, %s, %s)")
-	entry = (productionHouseID, name, release, duration, genre)
 	mycursor.execute(sql_query, entry)
 	#Uncomment when you want to make changes permanent
 	mydb.commit()
@@ -188,12 +164,42 @@ def getProductionHouseRating (mycursor, movieList):
 
 	ratingList = []
 	for i in movieList:
-		val = getMovieRatingFromID(i[0])
+		val = getMovieRatingFromID(mycursor, i[0])
 		if(val==None):
 			val = 0
 		ratingList.append(val)
 	avg = sum(ratingList)/len(ratingList)
 	return avg
+
+
+def getRankList(mycursor):
+	#get rank list for all production houses
+	#In ranked dict, key is PHID and value is [rank, score]
+
+	sql_query = "SELECT PHID FROM Production_Houses"
+	sql_query2 = "SELECT MOVIE_ID FROM Movies WHERE P_HouseID = %s"
+	mycursor.execute(sql_query)
+	temp_arr = mycursor.fetchall()
+	phid_rating_dict = {}
+	for i in temp_arr:
+		temp_id = i[0]
+		temp_id_val = (temp_id, )
+		mycursor.execute(sql_query2, temp_id_val)
+		curr_movie_list = mycursor.fetchall()
+		#print(curr_movie_list)
+		curr_rating = getProductionHouseRating(mycursor, curr_movie_list)
+		phid_rating_dict[temp_id] = curr_rating
+	sorted_dict = dict(sorted(phid_rating_dict.items(), key = operator.itemgetter(1), reverse = True))
+	ranked_dict = {}
+	rank = 1
+	for i in sorted_dict:
+		ranked_dict[i] = [rank, sorted_dict[i]]
+		rank = rank + 1
+
+	return ranked_dict
+
+
+
 
 ######################################################################################	
 
@@ -245,3 +251,5 @@ def graph2(mycursor, PHID):
 # arr4 = groupUsersByAge(cursor, arr3)
 # print(arr4)
 # graphUsersVSAge(arr4)
+
+# getRankList(cursor)
