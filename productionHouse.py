@@ -233,8 +233,11 @@ def getRankList(mycursor):
 	return ranked_dict
 
 
-
-
+def getRank(mydb, PHID):
+	mycursor = mydb.cursor()
+	ranked_dict = getRankList(mycursor)
+	print(ranked_dict[PHID])
+	return int(ranked_dict[PHID][0])
 ######################################################################################	
 
 # Using functions - 
