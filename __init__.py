@@ -21,7 +21,7 @@ mydb = mysql.connector.connect(
 	  host="localhost",
 	  user="user",
 	  passwd="password",
-	  database="newdb"
+	  database="newdb2"
 	)
 
 @app.route('/')

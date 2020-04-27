@@ -81,12 +81,12 @@ def getMovieViewersFromMovieList(mycursor, movieList):
 def getUpcomingMovies(mycursor, PHID):
 	#get upcoming movies corresponding to production house
 
-	sql_query = ("SELECT * FROM Upcoming_movies WHERE Production_HouseID = '%d'")%(PHID)
+	sql_query = ("SELECT MOVIE_NAME, Release_Date, GENRE, Duration FROM Upcoming_movies WHERE Production_HouseID = '%d'")%(PHID)
 	mycursor.execute(sql_query)
 	arr = mycursor.fetchall()
 	ans = ""
 	for x in arr:
-		ans += "<tr> <td>'%s'</td> <td>'%s'</td> <td>'%s'</td> <td>'%s'</td> </tr>"%(x[1], x[2], x[3], x[5])
+		ans += "<tr> <td>'%s'</td> <td>'%s'</td> <td>'%s'</td> <td>'%s'</td> </tr>"%(x[0], x[1], x[2], x[3])
 	return ans
 
 def getMerchDetails(mydb, PHID):
