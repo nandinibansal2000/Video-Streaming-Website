@@ -283,7 +283,7 @@
           <p></p>
 		      <button type="button" class="btn btn-secondary btn-lg btn-block" onclick="openForm()">Upload Movie</button>
 
-
+          <p></p>
 		      <a href="/"><button type="button" class="btn btn-secondary btn-lg btn-block">Log Out</button></a>
 		    </div>
 		  </div>
@@ -338,7 +338,7 @@
 		<table class="table">
 		  <thead class="thead-dark">
 		    <tr>
-		      <th scope="col">Name</th>
+		      <th scope="col">Upcoming Movie Name</th>
 		      <th scope="col">Release Date</th>
 		      <th scope="col">Genre</th>
 		      <th scope="col">Duration</th>
@@ -354,7 +354,18 @@
 		    {{ Upcoming_Movies_embed | safe }}
 		  </tbody>
 		</table>
-		{{ merch_embed | safe }}
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col"> Merch Name</th>
+          <th scope="col">Likes</th>
+          <th scope="col">Dislikes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ Merch_info_embed | safe }}
+      </tbody>
+    </table>
 	</div>
 	<script>
 		function openForm() {

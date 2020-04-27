@@ -8,15 +8,15 @@ import pygal
 import operator
 
 
-mydb = mysql.connector.connect(
+# mydb = mysql.connector.connect(
 
-	host="localhost",
-	user="Drigil",
-	passwd="Anshul12",
-	database = "dbmsproject",
-	auth_plugin="mysql_native_password"
+# 	host="localhost",
+# 	user="Drigil",
+# 	passwd="Anshul12",
+# 	database = "dbmsproject",
+# 	auth_plugin="mysql_native_password"
 
-)
+# )
 
 # if(mydb.is_connected()):
 # 	print("Successfully Connected")
@@ -89,8 +89,17 @@ def getUpcomingMovies(mycursor, PHID):
 		ans += "<tr> <td>'%s'</td> <td>'%s'</td> <td>'%s'</td> <td>'%s'</td> </tr>"%(x[1], x[2], x[3], x[5])
 	return ans
 
-def uploadMovie(mydb, productionHouseID, name, IMDB, duration, genre):
-	
+def getMerchDetails(mydb, PHID):
+	mycursor = mydb.cursor()
+	sql = "select MerchName, Likes, Dislikes from Merchandise where MovieID in (select Movie_id from Movies where P_HouseID=%d) order by Dislikes-Likes"%(PHID)
+	mycursor.execute(sql)
+	arr = mycursor.fetchall()
+	ans = ""
+	for x in arr:
+		ans += "<tr> <td>'%s'</td> <td>'%s'</td> <td>'%s'</td> </tr>"%(x[0], x[1], x[2])
+	return ans
+
+def uploadMovie(mydb, productionHouseID, name, IMDB, duration, genre, PrequelID=-1):
 	#upload movie
 	mycursor = mydb.cursor()
 	sql_query = ("INSERT INTO Movies (P_HOUSEID, MOVIE_NAME, IMDB, DURATION, GENRE) VALUES (%s, %s, %s, %s, %s)")
@@ -98,7 +107,32 @@ def uploadMovie(mydb, productionHouseID, name, IMDB, duration, genre):
 	mycursor.execute(sql_query, entry)
 	#Uncomment when you want to make changes permanent
 	mydb.commit()
+	if(PrequelID!=-1):
+		MovieID = Movies.getMovieID(mydb , name)
+		print("MovieID")
+		print(type(MovieID))
+		print(MovieID)
+		sql = "INSERT INTO `Prequel/Sequel` (PrequelID, Movie, SequelID) VALUES (%d, %d, %d)"%(PrequelID, MovieID, -1)
+		mycursor.execute(sql)
+		sql = "UPDATE `Prequel/Sequel` SET SequelID=%d WHERE Movie=%d"%(MovieID, PrequelID)
+		mycursor.execute(sql)
+		mydb.commit()
+		# sql = "SELECT * FROM `Prequel/Sequel` WHERE Movie=%d"%(PrequelID)
+		# mycursor.execute(sql)
+		# arr = mycursor.fetchall()
+		# if(len(arr)==0):
+		# 	sql = "INSERT INTO `Prequel/Sequel` (PrequelID, Movie, SequelID) VALUES (%d, %d, %d)"%(-1, PrequelID, MovieID)
+		# 	mycursor.execute(sql)
+		# 	mydb.commit()
 
+def uploadUpcomingMovie(mydb, productionHouseID, name, release, duration, genre):
+	#upload movie
+	mycursor = mydb.cursor()
+	sql_query = ("INSERT INTO Upcoming_movies (Production_HouseID, MOVIE_NAME, Release_Date, Duration, GENRE) VALUES (%s, %s, %s, %s, %s)")
+	entry = (productionHouseID, name, release, duration, genre)
+	mycursor.execute(sql_query, entry)
+	#Uncomment when you want to make changes permanent
+	mydb.commit()
 #Wont work right now due to foreign key constraint in Starcast
 def removeMovie(mycursor, movie):
 	#remove movie from name

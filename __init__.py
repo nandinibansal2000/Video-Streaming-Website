@@ -172,7 +172,8 @@ def productionHousePage(PID):
 	img_addr1 = url_for('static', filename='images/merch.jpeg')
 	arr = merchandise.getMerchandiseFromProductionHouse(mydb, PID)
 	merch_embed1 = merchandise.getMerchandiseHTML(arr, img_addr1)
-	return render_template("productionHouse.html", name=name1, Movies_embed=movies, Upcoming_Movies_embed=upcoming_movies, chart1=graph1, chart2=graph2, genreVSrating=gvr, url_upload=url, merch_embed=merch_embed1)
+	Merch_info_embed1 = productionHouse.getMerchDetails(mydb, PID)
+	return render_template("productionHouse.html", name=name1, Movies_embed=movies, Upcoming_Movies_embed=upcoming_movies, chart1=graph1, chart2=graph2, genreVSrating=gvr, url_upload=url, Merch_info_embed=Merch_info_embed1)
 
 @app.route('/artist/<int:AID>')
 def artistPage(AID):
