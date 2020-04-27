@@ -7,7 +7,7 @@ from flask import Flask,render_template,flash,request,url_for,redirect,session
 from passlib.hash import sha256_crypt
 # from MySQLdb import escape_string as thwart
 import gc
-import utkarsh
+import user
 import mysql.connector
 import productionHouse
 import pygal
@@ -80,28 +80,28 @@ def payment(UID):
 	UID = int(UID)
 	if request.method == "POST":
 		if( "user" in request.form):
-			utkarsh.makePaymentForUser(mydb, UID)
+			user.makePaymentForUser(mydb, UID)
 		if( "family" in request.form):
-			utkarsh.makePaymentForUser(mydb, UID)
+			user.makePaymentForUser(mydb, UID)
 		#Moving forward code
 	print("Moving Forward...")
 	return redirect(url_for('userPage', UID=UID))
 
 @app.route("/Rating/<UID>/<MovieID>", methods=['POST'])
 def Rating(UID, MovieID):
-	if(not utkarsh.checkPayment(mydb, UID)):
+	if(not user.checkPayment(mydb, UID)):
 		return "<h1>Please make payment to watch the movie</h1>"
 	if request.method == "POST":
 		if( "rate" in request.form):
 			rating = request.form["rating"]
-			utkarsh.watchNewMovie(mydb, int(UID), int(MovieID), int(rating))
+			user.watchNewMovie(mydb, int(UID), int(MovieID), int(rating))
 	return redirect(url_for('userPage', UID=int(UID)))
 
 @app.route('/user/<int:UID>', methods=['GET', 'POST'])
 def userPage(UID):
-	name1 = utkarsh.getName(mydb, UID)[0][0]
-	LoginID1 = utkarsh.getLoginID(mydb, UID)[0][0]
-	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
+	name1 = user.getName(mydb, UID)[0][0]
+	LoginID1 = user.getLoginID(mydb, UID)[0][0]
+	Hours1 = user.getHoursWatched(mydb, UID)[0][0]
 	url1 = "/payment/"+str(UID)
 	img_addr1 = url_for('static', filename='images/merch.jpeg')
 	arr = merchandise.getMerchandiseFromUser(mydb, UID)
@@ -114,7 +114,7 @@ def userPage(UID):
 		try:
 			movie_name = request.form["search_movie"]
 			print(movie_name)
-			search_movie_result = utkarsh.searchMovie(mydb, movie_name, UID)
+			search_movie_result = user.searchMovie(mydb, movie_name, UID)
 			return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, search_movie_result_embed=search_movie_result, url=url1, merch_embed=merch_embed1, suggested_embed=suggested)
 		except:
 			return render_template("user.html", name=name1, LoginID=LoginID1, hours=Hours1, url=url1, merch_embed=merch_embed1, suggested_embed=suggested)
@@ -130,12 +130,13 @@ def moviePage(UID, MovieID):
 	img_addr = url_for('static', filename='images/actor.jpg')
 	artists = Movies.getArtists(mydb, MovieID, img_addr)
 	phouse1 = Movies.getProductionHouseName(mydb, MovieID)
-	Hours1 = utkarsh.getHoursWatched(mydb, UID)[0][0]
+	Hours1 = user.getHoursWatched(mydb, UID)[0][0]
 	url1 = "/Rating/"+str(UID)+"/"+str(MovieID)
 	img_addr1 = url_for('static', filename='images/merch.jpeg')
 	arr = merchandise.getMerchandiseFromMovie(mydb, MovieID)
 	merch_embed1 = merchandise.getMerchandiseHTML(arr, img_addr1)
 	prequel1 = Movies.getPrequelSequel(mydb, UID, MovieID)
+	print(prequel1)
 	return render_template("movie.html", hours=Hours1, name=name1, genre=genre1, imdb=imdb1, prating=prating1, phouse=phouse1, duration=duration1, artist_embed=artists, url=url1, merch_embed=merch_embed1, prequel=prequel1)
 
 @app.route('/movie/<int:MovieID>')
@@ -324,7 +325,7 @@ def get_data():
 					if(designation=="User"):
 
 						user_signup(username,age,fam)
-						uid1 = utkarsh.getUID(mydb, username)
+						uid1 = user.getUID(mydb, username)
 						return redirect(url_for('userPage', UID=uid1))
 					elif(designation=="Artist"):
 
@@ -362,7 +363,7 @@ def get_data():
 				if(len(x)>0):
 					x=x[0][0]
 					if(x=="User"):
-						uid1 = utkarsh.getUID(mydb, username)
+						uid1 = user.getUID(mydb, username)
 						return redirect(url_for('userPage', UID=uid1))
 					elif(x=="Artist"):
 						uid1 = ARTISTID(mydb, username)
