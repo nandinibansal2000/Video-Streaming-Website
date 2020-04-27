@@ -207,14 +207,30 @@ def PasswordsCorrection(mydb):
 		mycursor.execute(sql)
 		mydb.commit()
 
+def makeGenreAtomic(mydb):
+	mycursor = mydb.cursor()
+	sql = "SELECT Movie_id, Genre from Movies"
+	mycursor.execute(sql)
+	myresult =  mycursor.fetchall()
+	for x in myresult:
+		if(x[1].find("|")!=-1):
+			old = x[1].split("|")
+			n = len(old)
+			m = randint(0, n-1)
+			new = old[m]
+			print(old, new)
+			sql = "UPDATE Movies SET Genre='%s' WHERE Movie_id='%d'"%(new, int(x[0]))
+			mycursor.execute(sql)
+			mydb.commit()
+
 if __name__ == '__main__':
 
-
+	from random import randint
 	mydb = mysql.connector.connect(
-	  host="localhost",
-	  user="user",
-	  passwd="password",
-	  database="aniket3"
+	  host="bsv8fhdqqljnoq8jt44x-mysql.services.clever-cloud.com",
+	  user="u7yvejx2zsljnqyn",
+	  passwd="ooJHBCTBUvEIywAnEc2x",
+	  database="bsv8fhdqqljnoq8jt44x"
 	)
 
-	PasswordsCorrection(mydb)
+	makeGenreAtomic(mydb)
