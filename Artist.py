@@ -148,6 +148,23 @@ def getCompetentArtist(mydb , ArtistID) :   # specifically based on genre / tast
             TopCompArtistID.append(i)
     return TopCompArtistID[:3]  # to send top rated 3 movies
 
+def getSimilarArtistEmbed(mydb, ArtistID, img_addr):
+    ans = """ """
+    arr = getCompetentArtist(mydb , ArtistID) 
+    for x in arr:
+        ans += """
+              <a href="%s" class="list-group-item list-group-item-action">
+                <div class="card">
+                  <img src="%s" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title">%s</h5>
+                  </div>
+                </div>
+              </a>
+              """%("/artist/"+str(x), img_addr, artist_info(mydb, int(x))[0])
+    ans2 = """<h3>Other Similar Artists/ Your competition</h3>
+    <div class="list-group list-group-horizontal">"""+ans+"""</div>"""
+    return ans2
 # +----------------+--------------+------+-----+---------+-------+
 # | Field          | Type         | Null | Key | Default | Extra |
 # +----------------+--------------+------+-----+---------+-------+

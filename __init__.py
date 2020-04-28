@@ -188,7 +188,9 @@ def artistPage(AID):
 	img_addr1 = url_for('static', filename='images/merch.jpeg')
 	arr = merchandise.getMerchandiseFromArtist(mydb, AID)
 	merch_embed1 = merchandise.getMerchandiseHTML(arr, img_addr1)
-	return render_template("artists.html", name=name1, age=age1, top_genre=genre, user_rating=uRating, imdb=imdb1, table=table1, merch_embed=merch_embed1)
+	img_addr2 = url_for('static', filename='images/actor.jpg')
+	similar_artist_embed1 = Artist.getSimilarArtistEmbed(mydb, AID, img_addr2)
+	return render_template("artists.html", name=name1, age=age1, top_genre=genre, user_rating=uRating, imdb=imdb1, table=table1, merch_embed=merch_embed1, similar_artist_embed=similar_artist_embed1)
 
 
 def user_signup(username,age,fam):
