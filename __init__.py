@@ -190,6 +190,7 @@ def artistPage(AID):
 	merch_embed1 = merchandise.getMerchandiseHTML(arr, img_addr1)
 	return render_template("artists.html", name=name1, age=age1, top_genre=genre, user_rating=uRating, imdb=imdb1, table=table1, merch_embed=merch_embed1)
 
+
 def user_signup(username,age,fam):
 	print("fjnckf")
 	mycursor = mydb.cursor()
@@ -215,14 +216,14 @@ def user_signup(username,age,fam):
 	print(ID,"wfjcklwcd")
 	print("fnvjfdv")
 	print(fam)
-	sql = "insert into Users values('%s','%s','%s','%s','%s','%s','%s','%s')"%(ID,username,fam,username,age,'0',0,"none")
+	sql = "insert into Users values('%s','%s','%s','%s','%s','%s')"%(ID,username,fam,age,"false",0)
 	# sql="INSERT INTO Users(UID,LoginID,Name,Age,IndividualPayment,AvgTime,SubscriptionType) VALUES(%s,%s,%s,%s,%s,%s,%s)",(ID,username,username,age,'0',0,"none")
 	mycursor.execute(sql)
 	
 
 	session['logged_in'] = True
 	session['username'] = username
-
+	
 def artist_signup(username,age):
 	mycursor = mydb.cursor()
 	sql = "SELECT MAX(ArtistID) FROM Artists "
