@@ -105,6 +105,49 @@ def artist_official_rating(mydb, input_Artist_ID):
     else :
         return result
     
+def getCompetentArtist(mydb , ArtistID) :   # specifically based on genre / taste of user
+    mycursor= mydb.cursor()
+    sql= "select MovieID from Starcast where ArtistID= '%d' "%(ArtistID)
+    mycursor.execute(sql)
+    movies = mycursor.fetchall() ;
+    # return movies    # ignoring the number of user that wathced the movie as they may or may not be iportant to affect.
+    FanUsers = set()
+    CompMoviesID = dict()   # other movies than Artis's watched by Fans of Artist
+    for m_id in movies :
+        sql= "SELECT UID FROM Watch_List WHERE MovieID = '%d' "%(m_id[0])
+        mycursor.execute(sql)
+        Fans = set(mycursor.fetchall()) # Fans of Artist
+        for User in Fans :
+            if(User not in FanUsers) :
+                FanUsers.add(User[0])
+                sql= "SELECT MovieID FROM Watch_List WHERE UID= '%d' "%(User[0])
+                mycursor.execute(sql)
+                FansMovies = mycursor.fetchall() ;
+                for movie in FansMovies :   # time to fill CompMoviesID
+                    # print(movie[0])
+                    if(movie not in movies) :
+                        if(movie[0] in CompMoviesID) :
+                            CompMoviesID[movie[0]] += 1
+                        else :
+                            CompMoviesID[movie[0]] = 1
+    TopCompMoviesID = list({k: v for k, v in sorted(CompMoviesID.items(), key=lambda item: item[1])}.keys())[::-1]
+    CompArtistID = dict()
+    for movie in TopCompMoviesID :
+        sql = "SELECT ArtistID FROM Starcast WHERE MovieID = '%d' "%(movie)
+        mycursor.execute(sql)
+        Artists = mycursor.fetchall()
+        for artist in Artists :
+            if(artist[0] != ArtistID) :
+                if(artist[0] in CompArtistID) : # rated Competant Artist with voting sys based on num of movies watched
+                    CompArtistID[artist[0]] += 1
+                else :
+                    CompArtistID[artist[0]] = 1
+    TopCompArtistID = list({k: v for k, v in sorted(CompArtistID.items(), key=lambda item: item[1])}.keys())[::-1]
+    for i in [49,81,259,15,56,130,20,149,23] :  # adding some random Artist for atleast filling 3 comp Artist
+        if(i not in TopCompArtistID) :
+            TopCompArtistID.append(i)
+    return TopCompArtistID[:3]  # to send top rated 3 movies
+
 # +----------------+--------------+------+-----+---------+-------+
 # | Field          | Type         | Null | Key | Default | Extra |
 # +----------------+--------------+------+-----+---------+-------+
