@@ -240,7 +240,7 @@ def getRank(mydb, PHID):
 	mycursor = mydb.cursor()
 	ranked_dict = getRankList(mycursor)
 	print(ranked_dict[PHID])
-	return int(ranked_dict[PHID][0])
+	return str(ranked_dict[PHID][0])+"/"+str(len(ranked_dict))
 ######################################################################################	
 
 # Using functions - 
