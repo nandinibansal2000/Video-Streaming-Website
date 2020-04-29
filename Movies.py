@@ -18,7 +18,9 @@ def getSuggestion(mydb , UID) :
             else :
                 MovieList[m[0]] = i[1]/( result[0][1] * (len(result)-1) )
     # print(MovieList , list(MovieList.items()))
-    return list(MovieList.items())[:3] # return MovieID and Weighted_similarity (diff from biased rating)
+    MovieList = list(MovieList.items())
+    MovieList.extend([5,75,101])
+    return MovieList[:3] # return MovieID and Weighted_similarity (diff from biased rating)
 
 def getSuggestionsEmbed(mydb, UID, img_addr):
     ans = """ """
