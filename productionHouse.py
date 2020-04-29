@@ -202,7 +202,10 @@ def getProductionHouseRating (mycursor, movieList):
 		if(val==None):
 			val = 0
 		ratingList.append(val)
-	avg = sum(ratingList)/len(ratingList)
+	if (len(ratingList)==0):
+		avg = 0
+	else:
+		avg = sum(ratingList)/len(ratingList)
 	return avg
 
 
