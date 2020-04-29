@@ -81,7 +81,7 @@ def getMovieViewersFromMovieList(mycursor, movieList):
 def getUpcomingMovies(mycursor, PHID):
 	#get upcoming movies corresponding to production house
 
-	sql_query = ("SELECT MOVIE_NAME, Release_Date, GENRE, Duration FROM Upcoming_movies WHERE Production_HouseID = '%d'")%(PHID)
+	sql_query = ("SELECT MOVIE_NAME, Release_Date, GENRE, Duration FROM Upcoming_movies WHERE Production_HouseID = '%d' ORDER BY Release_Date DESC")%(PHID)
 	mycursor.execute(sql_query)
 	arr = mycursor.fetchall()
 	ans = ""
