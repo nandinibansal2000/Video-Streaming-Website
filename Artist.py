@@ -174,12 +174,12 @@ def getSimilarArtistEmbed(mydb, ArtistID, img_addr):
 # +----------------+--------------+------+-----+---------+-------+
 
 
-if __name__ == "__main__":
-    import mysql.connector
-    mydb = mysql.connector.connect(
-      host="localhost",
-      user="user",
-      passwd="password",
-      database="myDB2"
-    )
-    print(top_genre(mydb, 1))
+# if __name__ == "__main__":
+#     import mysql.connector
+#     mydb = mysql.connector.connect(
+#       host="localhost",
+#       user="user",
+#       passwd="password",
+#       database="myDB2"
+#     )
+#     print(top_genre(mydb, 1))

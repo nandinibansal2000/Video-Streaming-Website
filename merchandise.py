@@ -242,15 +242,15 @@ def getDislikes(mycursor, merch):
 #print(getMoviesFromArtist(cursor, 1))
 #arr = getMerchandiseFromUser(cursor, 5)
 
-if __name__ == '__main__':
-	import mysql.connector
-	mydb = mysql.connector.connect(
-	  host="localhost",
-	  user="user",
-	  passwd="password",
-	  database="newdb"
-	)
-	# img_addr1 = url_for('static', filename='images/merch.jpeg')
-	arr = getMerchandiseFromArtist(mydb, 5)
-	print("arr", arr[0])
-	getMerchandiseHTML(arr, "")
+# if __name__ == '__main__':
+# 	import mysql.connector
+# 	mydb = mysql.connector.connect(
+# 	  host="localhost",
+# 	  user="user",
+# 	  passwd="password",
+# 	  database="newdb"
+# 	)
+# 	# img_addr1 = url_for('static', filename='images/merch.jpeg')
+# 	arr = getMerchandiseFromArtist(mydb, 5)
+# 	print("arr", arr[0])
+# 	getMerchandiseHTML(arr, "")

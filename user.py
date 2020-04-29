@@ -237,19 +237,19 @@ def makeGenreAtomicInUpcomingMovies(mydb):
 			sql = 'UPDATE Upcoming_movies SET Genre="%s" WHERE Movie_name="%s"'%(new, x[0])
 			mycursor.execute(sql)
 			mydb.commit()
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-	from random import randint
-	# mydb = mysql.connector.connect(
-	#   host="bsv8fhdqqljnoq8jt44x-mysql.services.clever-cloud.com",
-	#   user="u7yvejx2zsljnqyn",
-	#   passwd="ooJHBCTBUvEIywAnEc2x",
-	#   database="bsv8fhdqqljnoq8jt44x"
-	# )
-	mydb = mysql.connector.connect(
-	  host="localhost",
-	  user="user",
-	  passwd="password",
-	  database="newdb2"
-	)
-	makeGenreAtomicInUpcomingMovies(mydb)
+# 	from random import randint
+# 	# mydb = mysql.connector.connect(
+# 	#   host="bsv8fhdqqljnoq8jt44x-mysql.services.clever-cloud.com",
+# 	#   user="u7yvejx2zsljnqyn",
+# 	#   passwd="ooJHBCTBUvEIywAnEc2x",
+# 	#   database="bsv8fhdqqljnoq8jt44x"
+# 	# )
+# 	mydb = mysql.connector.connect(
+# 	  host="localhost",
+# 	  user="user",
+# 	  passwd="password",
+# 	  database="newdb2"
+# 	)
+# 	makeGenreAtomicInUpcomingMovies(mydb)

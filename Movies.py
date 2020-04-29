@@ -262,14 +262,14 @@ def shell(mydb) :
             print("damn")
 
 
-if __name__ == "__main__":
-    import mysql.connector
-    mydb = mysql.connector.connect(
-      host="localhost",
-      user="user",
-      passwd="password",
-      database="myDB2"
-    )
-    for i in range(1,5):
-        print(getSuggestion(mydb, i))
+# if __name__ == "__main__":
+#     import mysql.connector
+#     mydb = mysql.connector.connect(
+#       host="localhost",
+#       user="user",
+#       passwd="password",
+#       database="myDB2"
+#     )
+#     for i in range(1,5):
+#         print(getSuggestion(mydb, i))
 
