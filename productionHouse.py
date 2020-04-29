@@ -279,8 +279,15 @@ def graph2(mycursor, PHID):
 	mycursor.execute(sql_query)
 	arr = mycursor.fetchall()
 	arr3 = getMovieViewersFromMovieList(mycursor, arr)
-	arr4 = groupUsersByAge(mycursor, arr3)
-	return graphUsersVSAge(arr4)
+	if(len(arr3)==0):
+		line_chart = pygal.HorizontalBar()
+		line_chart.title = "Number of users corresponding to Age"
+		graph2 = line_chart.render_data_uri()
+		return graph2
+	else:
+		arr4 = groupUsersByAge(mycursor, arr3)
+		return graphUsersVSAge(arr4)
+
 
 ######################################################################################
 
