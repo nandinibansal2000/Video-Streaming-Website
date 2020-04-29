@@ -158,11 +158,13 @@ def getMovieRatingFromID(mycursor, movie):
 
 def groupUsersByAge (mycursor, userlist):
 	#get number of users belonging to a particular age
-
-	userTuple = tuple(userlist)
-	sql_query = ("SELECT AGE, COUNT(UID) FROM Users WHERE UID IN {} GROUP BY AGE").format(userTuple)
-	mycursor.execute(sql_query)
-	arr = mycursor.fetchall()
+	try:
+		userTuple = tuple(userlist)
+		sql_query = ("SELECT AGE, COUNT(UID) FROM Users WHERE UID IN {} GROUP BY AGE").format(userTuple)
+		mycursor.execute(sql_query)
+		arr = mycursor.fetchall()
+	except:
+		arr = []
 	return arr
 
 def groupMoviesByGenre (mycursor, movieList):
