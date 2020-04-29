@@ -107,16 +107,17 @@ def userPage(UID):
 	merch_embed1 = merchandise.getMerchandiseHTML(arr, img_addr1)
 	img_addr = url_for('static', filename='images/poster.jpg')
 	suggested = Movies.getSuggestionsEmbed(mydb, UID, img_addr)
+	familyID1 = user.getFamilyID(mydb, UID)
 	if request.method == 'GET':		
-		return render_template("user.html", LoginID=LoginID1, hours=Hours1, url=url1, merch_embed=merch_embed1, suggested_embed=suggested)
+		return render_template("user.html", LoginID=LoginID1, hours=Hours1, url=url1, merch_embed=merch_embed1, suggested_embed=suggested, familyID=familyID1)
 	elif request.method == 'POST':
 		try:
 			movie_name = request.form["search_movie"]
 			print(movie_name)
 			search_movie_result = user.searchMovie(mydb, movie_name, UID)
-			return render_template("user.html", LoginID=LoginID1, hours=Hours1, search_movie_result_embed=search_movie_result, url=url1, merch_embed=merch_embed1, suggested_embed=suggested)
+			return render_template("user.html", LoginID=LoginID1, hours=Hours1, search_movie_result_embed=search_movie_result, url=url1, merch_embed=merch_embed1, suggested_embed=suggeste, familyID=familyID1)
 		except:
-			return render_template("user.html", LoginID=LoginID1, hours=Hours1, url=url1, merch_embed=merch_embed1, suggested_embed=suggested)
+			return render_template("user.html", LoginID=LoginID1, hours=Hours1, url=url1, merch_embed=merch_embed1, suggested_embed=suggested, familyID=familyID1)
 
 
 @app.route('/user/<int:UID>/movie/<int:MovieID>')

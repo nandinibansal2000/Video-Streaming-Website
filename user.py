@@ -18,7 +18,11 @@ def watchNewMovie(mydb, input_UID, input_MovieID, input_Rating):
 	mycursor.execute(sql)
 	mydb.commit()
 
-
+def getFamilyID(mydb, UID):
+	mycursor = mydb.cursor()
+	sql = "SELECT FamilyID FROM Users WHERE UID=%d"%(UID)
+	mycursor.execute(sql)
+	return  mycursor.fetchall()[0][0]
 
 def getLoginID(mydb, input_UID):
 	mycursor = mydb.cursor()
