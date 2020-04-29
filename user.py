@@ -60,9 +60,11 @@ def refreshAverageTime(mydb, input_UID):
 def searchMovie(mydb, movieName, input_UID):
 	mycursor = mydb.cursor()
 	movieName = '%'+movieName+'%'
+	print("percent debug", movieName)
 	sql = "SELECT Movie_id, Movie_Name FROM Movies WHERE Movie_Name LIKE '%s'"%(movieName)
 	mycursor.execute(sql)
 	myresult =  mycursor.fetchall()
+	print(len(myresult))
 	ans = ""
 	for x in myresult:
 		ans += '<a href="/user/'+str(input_UID)+'/movie/'+str(x[0])+'">'+'<button type="button" class="btn btn-light">'+str(x[1])+'</button>'+'</a>'

@@ -115,7 +115,8 @@ def userPage(UID):
 			movie_name = request.form["search_movie"]
 			print(movie_name)
 			search_movie_result = user.searchMovie(mydb, movie_name, UID)
-			return render_template("user.html", LoginID=LoginID1, hours=Hours1, search_movie_result_embed=search_movie_result, url=url1, merch_embed=merch_embed1, suggested_embed=suggeste, familyID=familyID1)
+			print("search_movie_result", search_movie_result)
+			return render_template("user.html", LoginID=LoginID1, hours=Hours1, search_movie_result_embed=search_movie_result, url=url1, merch_embed=merch_embed1, suggested_embed=suggested, familyID=familyID1)
 		except:
 			return render_template("user.html", LoginID=LoginID1, hours=Hours1, url=url1, merch_embed=merch_embed1, suggested_embed=suggested, familyID=familyID1)
 
